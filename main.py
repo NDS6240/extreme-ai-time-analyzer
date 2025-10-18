@@ -1,16 +1,22 @@
-# This is a sample Python script.
+from gmail_fetcher import fetch_reports_from_gmail
+from report_parser import parse_report
+from pathlib import Path
 
-# Press ⌃F5 to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+if __name__ == "__main__":
+    print("📩 Fetching new reports from Gmail...")
+    fetch_reports_from_gmail()
 
+    print("\n🧠 Analyzing downloaded reports...\n")
+    downloads_path = Path("downloads")
+    if not downloads_path.exists():
+        print("⚠️ No 'downloads' folder found. Please ensure files are downloaded correctly.")
+    else:
+        files = list(downloads_path.glob("*"))
+        if not files:
+            print("⚠️ No files found in 'downloads' folder.")
+        else:
+            for f in files:
+                result = parse_report(f)
+                print(f"📄 File: {result['file']} | Type: {result['type']} | Total Hours: {result['total_hours']}")
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print("\n✅ Process complete.")
