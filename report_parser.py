@@ -1,17 +1,18 @@
 import os
 import json
-import pdfplumber  # We are back to using pdfplumber
+import pdfplumber
 import pandas as pd
 from pathlib import Path
 from dotenv import load_dotenv
-import google.generativeai as genai
+from openai import OpenAI
 
 # --- Configuration and API Key Loading ---
 load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
+API_KEY = os.getenv("OPENAI_API_KEY")
 if not API_KEY:
-    raise ValueError("Error: 'GEMINI_API_KEY' not found in .env file.")
-genai.configure(api_key=API_KEY)
+    raise ValueError("Error: 'OPENAI_API_KEY' not found in .env file.")
+
+client = OpenAI(api_key=API_KEY)
 
 
 # --- Helper function to extract text from digital PDF ---
@@ -50,67 +51,66 @@ def _extract_text_from_excel_or_csv(file_path: str) -> str:
         return ""
 
 
+# --- OpenAI-based LLM analysis ---
 def _analyze_text_with_llm(raw_text: str, file_name: str) -> dict | None:
     """
-    Sends raw text to the Gemini API and requests a detailed JSON structure.
-    Uses the basic 'gemini-pro' model which is text-only.
+    Sends extracted text to OpenAI (GPT-4o-mini) to extract structured attendance data.
+    Searches for Hebrew keywords related to employee info and summary totals.
     """
     if not raw_text.strip():
         print(f"⚠️ Skipping {file_name}, no text was extracted.")
         return None
 
-    # --- MODEL CHANGE ---
-    # Using 'gemini-pro' (the basic text-only model)
-    # This should be available on your account after enabling the API.
-    model = genai.GenerativeModel('gemini-pro')
-
-    prompt = f"""
-    You are an expert HR data extraction bot.
-    Analyze the following raw text extracted from a timesheet report file named '{file_name}'.
-    The text may be messy and unstructured.
-
-    Your task is to analyze this text and extract the following information:
-    1.  The full employee name (key: "employee_name").
-    2.  The employee ID number (key: "employee_id").
-    3.  The report period (key: "report_period"), e.g., "09/2025".
-    4.  A dictionary of *all relevant summary totals* (key: "report_summary").
-        - Find all relevant totals (e.g., "Total Presence", "Total Approved", "Total Standard", "Total Overtime").
-
-    Return *only* a valid JSON object with these keys.
-    If a value is not found, set it to null.
-
-    Example:
-    {{
-      "employee_name": "Israel Israeli",
-      "employee_id": "123456",
-      "report_period": "09/2025",
-      "report_summary": {{
-        "Total Hours": "180:00",
-        "Approved Hours": "175:30"
-      }}
-    }}
-
-    Here is the text to analyze:
-    ---
-    {raw_text}
-    ---
-    """
-
     try:
-        # Call the API with text-only content
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
-                response_mime_type="application/json"
-            )
+        prompt = f"""
+        You are an AI assistant that extracts structured data from Hebrew attendance reports.
+
+        The following text is from a file called "{file_name}".
+        Extract all relevant employee and summary fields, focusing on:
+
+        Hebrew keywords like:
+        "שם", "עובד", "ת.ז", "מספר עובד", "חודש", "סה\"כ", "נוכחות", "מאושרות",
+        "לתשלום", "שעות נוספות", "חופשה", "מחלה", "חג", "סך".
+
+        Return a JSON with the following structure:
+        {{
+          "employee_name": "",
+          "employee_id": "",
+          "employee_number": "",
+          "report_month": "",
+          "total_presence_hours": "",
+          "total_approved_hours": "",
+          "total_payable_hours": "",
+          "overtime_hours": "",
+          "vacation_days": "",
+          "sick_days": "",
+          "holiday_days": ""
+        }}
+
+        Do not include signatures, approvals, or manager info.
+        Return **only valid JSON**, with null values for missing fields.
+
+        Text to analyze:
+        ---
+        {raw_text}
+        ---
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a precise HR data extraction assistant."},
+                {"role": "user", "content": prompt}
+            ]
         )
 
-        response_text = response.text.strip().replace("```json", "").replace("```", "").strip()
-        data = json.loads(response_text)
+        response_text = response.choices[0].message.content.strip()
+        cleaned = response_text.replace("```json", "").replace("```", "").strip()
+        data = json.loads(cleaned)
         return data
 
-    except json.JSONDecodeError as e:
-        print(f"❌ JSON Error: Model did not return valid JSON for {file_name}. Response: {response.text}")
+    except json.JSONDecodeError:
+        print(f"❌ JSON Error: Model did not return valid JSON for {file_name}. Response: {response_text}")
     except Exception as e:
         print(f"❌ API Error for {file_name}: {e}")
 
@@ -121,8 +121,8 @@ def _analyze_text_with_llm(raw_text: str, file_name: str) -> dict | None:
 
 def parse_report(file_path: str) -> dict:
     """
-    Detects file type, extracts raw text, and sends it to an LLM for analysis.
-    This version does NOT support scanned/OCR files.
+    Detects file type, extracts raw text, and sends it to OpenAI for structured analysis.
+    Works with Hebrew text-based reports (PDF, Excel, CSV).
     """
     p = Path(file_path)
     file_name = p.name
@@ -135,20 +135,15 @@ def parse_report(file_path: str) -> dict:
         "report_summary": None
     }
 
-    # Step 1: Extract raw text based on file extension
     if p.suffix.lower() == ".pdf":
         raw_text = _extract_text_from_pdf(file_path)
     elif p.suffix.lower() in [".xlsx", ".xls", ".csv"]:
         raw_text = _extract_text_from_excel_or_csv(file_path)
     else:
-        # This will skip image files and unsupported types
         print(f"--- Skipping unsupported file type: {file_name} ---")
         return result
 
-    # Step 2: Send the extracted text to the LLM for analysis
     llm_result = _analyze_text_with_llm(raw_text, file_name)
-
-    # Step 3: Populate the result dictionary
     if llm_result:
         result.update(llm_result)
 
@@ -156,19 +151,14 @@ def parse_report(file_path: str) -> dict:
 
 
 if __name__ == "__main__":
-    # --- Local Test Runner ---
-    print("--- Testing LLM-based Report Parser (v6 - Text Only) ---")
+    print("--- Testing OpenAI-based Report Parser (v7) ---")
 
     downloads_path = Path("downloads")
     if not downloads_path.exists():
         print(f"⚠️ '{downloads_path}' directory not found.")
     else:
-        # Back to only supporting text-based files
         supported_extensions = [".pdf", ".xlsx", ".xls", ".csv"]
-        test_files = []
-        for ext in supported_extensions:
-            test_files.extend(list(downloads_path.glob(f"*{ext}")))
-
+        test_files = [f for ext in supported_extensions for f in downloads_path.glob(f"*{ext}")]
         if not test_files:
             print(f"⚠️ No supported text files found in '{downloads_path}' to test.")
         else:
