@@ -2,6 +2,8 @@ import json
 from gmail_fetcher import fetch_reports_from_gmail
 from report_parser import parse_report  # Import the new LLM-based parser
 from pathlib import Path
+from report_parser import ALL_RESULTS
+from export_to_excel import export_summary_excel
 
 if __name__ == "__main__":
     print("📩 Fetching new reports from Gmail...")
@@ -19,22 +21,23 @@ if __name__ == "__main__":
             supported_extensions = [".pdf", ".xlsx", ".xls", ".csv"]
 
             for f in files:
-                # Only attempt to parse supported file types
-                if f.is_file() and f.suffix.lower() in supported_extensions:
-                    print(f"\n--- Analyzing: {f.name} ---")
-                    result = parse_report(str(f))
+                # Skip already processed or generated files
+                if "_parsed" in f.name or f.name.startswith(".") or f.suffix.lower() not in supported_extensions:
+                    print(f"--- Skipping generated or unsupported file: {f.name} ---")
+                    continue
 
-                    # Print the detailed results
-                    print(f"  File: {result['file']}")
-                    print(f"  Name: {result['employee_name']}")
-                    print(f"  ID: {result['employee_id']}")
-                    print(f"  Period: {result['report_period']}")
-                    # Pretty print the summary totals (using the new key 'report_summary')
-                    summary_str = json.dumps(result.get('report_summary'), indent=4, ensure_ascii=False)
-                    print(f"  Summary:\n{summary_str}")
+                # Parse only original report files
+                print(f"\n--- Analyzing: {f.name} ---")
+                result = parse_report(str(f))
 
-                elif f.is_file():
-                    # Acknowledge unsupported files
-                    print(f"--- Skipping unsupported file: {f.name} ---")
+                # Print detailed results
+                print(f"  File: {result['file']}")
+                print(f"  Name: {result['employee_name']}")
+                print(f"  ID: {result['employee_id']}")
+                print(f"  Period: {result['report_period']}")
+                summary_str = json.dumps(result.get('report_summary'), indent=4, ensure_ascii=False)
+                print(f"  Summary:\n{summary_str}")
 
     print("\n✅ Process complete.")
+
+    export_summary_excel(ALL_RESULTS)

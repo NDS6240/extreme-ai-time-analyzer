@@ -20,6 +20,35 @@ if not API_KEY:
     raise ValueError("Error: 'OPENAI_API_KEY' not found in .env file.")
 client = OpenAI(api_key=API_KEY)
 
+ALL_RESULTS = []
+
+# =========================
+#  Known Hebrew Keywords Context
+# =========================
+KEYWORDS_CONTEXT = """
+Known Hebrew keywords by category:
+
+1. פרטי עובד (Employee Details):
+   - שם העובד, שם פרטי, שם משפחה, מספר עובד, מספר תעודת זהות, מזהה עובד, מזהה, מחלקה, תפקיד, מס' עובד, שם:, לשם העובד:, Employee Name:, Employee:, שם משפחה:, שם פרטי:
+
+2. סיכום שעות (Hours Summary):
+   - סה"כ שעות נוכחות, שעות עבודה, סה"כ שעות, שעות מאושרות, שעות לתשלום, שעות לתשלום כולל, סה"כ שעות לתשלום, סה"כ שעות מאושרות
+
+3. שעות נוספות (Overtime):
+   - שעות נוספות, שעות נוספות 125%, שעות נוספות 150%, סה"כ שעות נוספות
+
+4. היעדרויות (Absences):
+   - ימי חופשה, חופשה, ימי מחלה, מחלה, ימי חג, חג, חגים, היעדרות, היעדרויות
+
+5. תקן (Norm/Quota):
+   - תקן, שעות תקן, משרה, אחוז משרה
+
+6. תאריכים ודוח (Dates/Report):
+   - חודש, חודש הדוח, לתקופה, מתאריך, עד תאריך, תקופת הדוח, חודש עבודה, חודש שכר, שנת דוח, שנה
+
+Use these keywords to help identify relevant fields in the report text.
+"""
+
 # =========================
 #  Heuristics
 # =========================
@@ -87,6 +116,20 @@ def _extract_text_from_excel_or_csv(file_path: str) -> str:
     return text.strip()
 
 # =========================
+#  Helper for reversing Hebrew words if reversed
+# =========================
+def _fix_reversed_hebrew(text: str) -> str:
+    def maybe_reverse(word):
+        if re.fullmatch(r"[א-ת]{2,}", word) and len(word) > 2:
+            return word[::-1]
+        return word
+    fixed_lines = []
+    for line in text.splitlines():
+        fixed_words = [maybe_reverse(w) for w in line.split()]
+        fixed_lines.append(" ".join(fixed_words))
+    return "\n".join(fixed_lines)
+
+# =========================
 #  LLM call
 # =========================
 def _analyze_text_with_llm(raw_text: str, file_name: str) -> dict | None:
@@ -98,8 +141,43 @@ def _analyze_text_with_llm(raw_text: str, file_name: str) -> dict | None:
         print(f"⚠️ Skipping {file_name}, no text was extracted.")
         return None
 
+    detected_name = None
+    name_match = re.search(r"(?:שם\s*העובד|עובד|Employee Name|שם\s*:)\s*[:\-]?\s*([א-תA-Za-z'\-\" ]{3,40})", raw_text)
+    if name_match:
+        detected_name = name_match.group(1).strip().split("\n")[0]
+        # Exclude common false positives
+        if any(x in detected_name for x in ["דוח", "נוכחות", "חודש", "מערכת", "דו\"ח"]):
+            detected_name = None
+
+    # Fallback if not found
+    if not detected_name:
+        candidates = re.findall(r"([א-ת]{2,}\s+[א-ת]{2,}(?:\s+[א-ת]{2,})?)", raw_text[:400])
+        for c in candidates:
+            if not any(x in c for x in ["דוח", "נוכחות", "חודש", "מערכת", "דו\"ח"]):
+                detected_name = c.strip()
+                break
+
+    # Fix reversed two-word Hebrew names
+    if detected_name and re.fullmatch(r"[א-ת]{2,}\s+[א-ת]{2,}", detected_name):
+        parts = detected_name.split()
+        if all(re.fullmatch(r"[א-ת]{2,}", p) for p in parts):
+            detected_name = " ".join(p[::-1] for p in parts)
+
+    name_hint = f"\nDetected possible employee name (for reference): {detected_name}\n" if detected_name else ""
+
     prompt = f"""
 You are an expert data extractor for Hebrew time-attendance reports.
+Use the following list of known Hebrew keywords to identify relevant fields:
+{KEYWORDS_CONTEXT}
+
+When identifying "employee_name":
+- Look for labels like "שם העובד", "עובד:", "Employee Name:", "שם:" or similar.
+- Extract the 2–3 consecutive Hebrew or Latin words following that label.
+- Ignore single Hebrew words unless directly connected to those labels.
+- Prefer full names (first + last).
+- If the extracted Hebrew name appears reversed (e.g., דבוע סיטרכ), reverse the letters to restore proper order (כריסטוב).
+{name_hint}
+
 Given the following report text (Hebrew, may include tables), extract the fields below.
 If a field is not present, return null for that field.
 Return ONLY valid JSON (no comments, no markdown fences).
@@ -183,6 +261,8 @@ def parse_report(file_path: str) -> dict:
         print(f"--- Skipping unsupported file type: {file_name} ---")
         return result
 
+    raw_text = _fix_reversed_hebrew(raw_text)
+
     # 2) LLM analysis → structured JSON
     llm = _analyze_text_with_llm(raw_text, file_name)
     if not llm:
@@ -205,6 +285,68 @@ def parse_report(file_path: str) -> dict:
         "holiday_days":        llm.get("holiday_days"),
     }
 
+    # --- Auto-export result to CSV for debugging/inspection ---
+    try:
+        out_folder = Path(file_path).parent
+        base_name = Path(file_path).stem
+        csv_path = out_folder / f"{base_name}_parsed.csv"
+
+        # Write CSV
+        import csv
+        # Flatten dict for CSV: use top-level keys and, for report_summary, flatten its keys as columns
+        csv_row = result.copy()
+        summary = csv_row.pop("report_summary", {}) or {}
+        for k, v in summary.items():
+            csv_row[k] = v
+        # Write header and row
+        with open(csv_path, "w", encoding="utf-8", newline='') as cf:
+            writer = csv.DictWriter(cf, fieldnames=list(csv_row.keys()))
+            writer.writeheader()
+            writer.writerow(csv_row)
+        print(f"✅ Parsed result exported to CSV: {csv_path}")
+    except Exception as e:
+        print(f"⚠️ Failed to export parsed result for {file_path}: {e}")
+
+    ALL_RESULTS.append(result)
+
     return result
 
 # (No __main__ block – main.py runs this module.)
+
+def export_all_results():
+    """
+    Export the entire ALL_RESULTS list into a single JSON and CSV file
+    in the current working directory.
+    """
+    if not ALL_RESULTS:
+        print("⚠️ No results to export in export_all_results().")
+        return
+
+    out_folder = Path.cwd()
+    csv_path = out_folder / "all_reports_parsed.csv"
+
+    try:
+        # Write consolidated CSV
+        import csv
+        csv_rows = []
+        for res in ALL_RESULTS:
+            row = res.copy()
+            summary = row.pop("report_summary", {}) or {}
+            for k, v in summary.items():
+                row[k] = v
+            csv_rows.append(row)
+
+        fieldnames = set()
+        for row in csv_rows:
+            fieldnames.update(row.keys())
+        fieldnames = sorted(fieldnames)
+
+        with open(csv_path, "w", encoding="utf-8", newline='') as cf:
+            writer = csv.DictWriter(cf, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in csv_rows:
+                writer.writerow(row)
+        print(f"✅ Consolidated parsed results exported to CSV: {csv_path}")
+
+    except Exception as e:
+        print(f"⚠️ Failed to export consolidated parsed results: {e}")
