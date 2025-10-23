@@ -1,0 +1,7 @@
+# Core dependencies for Extreme AI Time Analyzer
+pandas==2.2.2           # Data manipulation and analysis
+pdfplumber==0.11.0      # Extracting text and tables from PDF reports
+pdf2image==1.17.0       # Converting PDF pages to images for OCR
+pytesseract==0.3.13     # OCR text extraction from images
+openai==1.50.2          # AI-based report parsing and analysis
+python-dotenv==1.0.1    # Environment variable management (.env)
