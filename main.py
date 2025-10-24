@@ -34,7 +34,8 @@ if __name__ == "__main__":
                 print(f"  File: {result['file']}")
                 print(f"  Name: {result['employee_name']}")
                 print(f"  ID: {result['employee_id']}")
-                print(f"  Period: {result['report_period']}")
+                period = result.get('report_month') or result.get('report_period')
+                print(f"  Period: {period}")
                 summary_str = json.dumps(result.get('report_summary'), indent=4, ensure_ascii=False)
                 print(f"  Summary:\n{summary_str}")
 
