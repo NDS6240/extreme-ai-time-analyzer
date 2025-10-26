@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
-*.json
+*.parsed.json
+Training_forms/
+zones_templates/
 *.env
 downloads/
 tokens/
