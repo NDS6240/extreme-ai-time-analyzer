@@ -390,7 +390,8 @@ def _analyze_text_with_llm(raw_text: str, file_name: str, hints: dict | None = N
             if v is not None:
                 hints_lines.append(f"- {k}: {v}")
         if hints_lines:
-            hints_text = "\n\nNumeric hints extracted from report text:\n" + "\n".join(hints_lines) + "\n"
+            hints_text = "\n\nNumeric hints extracted from report text (use for guidance):\n" + "\n".join(
+                hints_lines) + "\n"
 
     # --- New Name Hint Logic (with Blacklist) ---
     blacklist_str = ", ".join([
@@ -413,44 +414,69 @@ The name in the text might be a close match, not an exact one.
 Known names: [{names_str}]
 """
 
+    # --- START OF EDITED SECTION 1: name_instruction ---
     name_instruction = ""
-    if name_hint:
-        name_instruction = f"""
-When identifying "employee_name":
-- A strong candidate name has been found: "{name_hint}"
-- **USE THIS NAME.**
-- Your job is to 1) Fix its RTL order if reversed, and 2) Complete it if it's partial.
+    name_hint_to_use = name_hint if name_hint else "None"
 
-- **CRITICAL: If the hint itself contains forbidden words like 'עובד', 'כרטיס', 'דוח', 'נוכחות', 'אסמכת', IGNORE THE HINT and find the real name yourself.** Forbidden words list: {blacklist_str}.
-- **RTL FIX:** If the hint is reversed (e.g., "ןהכ לארשי"), you must output the correct version (e.g., "ישראל כהן").
-- **LTR FIX:** If the hint is "תירוש חיים", it's LTR. Fix it to "חיים תירוש".
-- If the hint is already correct (e.g., "אביה אלטויל"), output it as is.
-"""
-    else:
-        # If Regex failed, tell the LLM to find it (and avoid headers).
-        name_instruction = f"""
-When identifying "employee_name":
-- **Regex and Backup List failed.** You must find the name manually.
-- Look for labels like "שם העובד", "עובד:", or a name near an ID number.
-- **CRITICAL: AVOID** extracting general titles, labels, or company names.
-- **DO NOT EXTRACT THESE WORDS (THE "MINEFIELD"):** {blacklist_str}.
-- Focus on actual human names (2-3 words).
-- If the name you find is reversed (e.g., "ןהכ לארשי"), you must **fix it** to "ישראל כהן" in your JSON output.
-"""
-    # --- End New Name Logic ---
+    name_instruction = f"""
+**CRITICAL RULES FOR "employee_name":**
 
+1.  **CHECK FOR REVERSED NAMES (RTL FIX):**
+    - You **MUST** check if the name is reversed (e.g., "ןהכ לארשי" or "טלבנירג ינימ").
+    - If it is reversed, you **MUST** fix it to the correct RTL order in your JSON output (e.g., "ישראל כהן" or "מינה גרינבלט"). This is a critical failure if missed.
+
+2.  **AVOID THE "MINEFIELD" (Blacklist):**
+    - You **MUST NOT** extract these words as a name: {blacklist_str}.
+
+3.  **USE THE HINTS (Regex/File):**
+    - A Regex search provided this hint: "{name_hint_to_use}".
+    - The filename is: "{file_name}".
+    - **Your Priority:**
+        a) If the Regex hint ("{name_hint_to_use}") is valid (not "None" and not in the MINEFIELD), **USE IT**. (And fix it if it's reversed).
+        b) If the hint is invalid, search the text body for labels like "שם העובד" or "עובד:".
+        c) If you still can't find a name, **check the filename "{file_name}"** for a human name (e.g., "חיים תירוש").
+
+4.  **FINAL CHECK:** The name must be a human name, not a label.
+"""
+    # --- END OF EDITED SECTION 1 ---
+
+    # --- START OF EDITED SECTION 2: flexibility_instruction ---
     flexibility_instruction = """
-IMPORTANT: The report text may contain many different types of hour summaries (e.g., "שעות נוספות 125%", "שעות חג", "שעות מילואים", "שעות מחלה") or day summaries (e.g., "ימי חופשה", "ימי מחלה").
-The JSON keys provided are the *minimum required*.
-You *must* identify ALL numeric summary fields present in the text, even if they are not in the required list.
-For example, if you find "שעות כוננות: 10.5" and "ימי הבראה: 3", you must include them.
-Try to map them to the *closest* required key if possible (e.g., "ימי חופשה" -> "vacation_days").
-If a clear mapping is not possible (e.g., "שעות כוננות"), create a *new key* for it in the JSON output (e.g., "standby_hours": 10.5).
-Be flexible and do not ignore data just because it doesn't match the exact keywords.
-"""
+**CRITICAL RULES FOR NUMERIC DATA:**
 
+Your main goal is to find all numeric totals. The reports are inconsistent. You must be a detective.
+
+1.  **REQUIRED HOURS (Find these values):**
+    - `total_presence_hours`: Find the main presence hours. Look for terms like "סהכ שעות נוכחות", "נוכחות ברוטו", "סהכ שעות".
+    - `total_approved_hours`: Find the approved hours. Look for terms like "סהכ שעות מאושרות", "שעות מאושרות".
+    - `total_payable_hours`: Find the payable hours. Look for terms like "סהכ שעות לתשלום", "שעות לתשלום".
+    - `overtime_hours`: Find overtime. Look for "שעות נוספות", "סהכ נוספות", "125%", "150%". Sum them up if they are separate.
+
+2.  **REQUIRED DAYS (Find these values):**
+    - `vacation_days`: Look for "ימי חופשה", "חופשה".
+    - `sick_days`: Look for "ימי מחלה", "מחלה".
+    - `holiday_days`: Look for "ימי חג", "חג".
+
+3.  **CRITICAL SANITY CHECK: Days vs. Hours vs. Minutes:**
+    - You **MUST** distinguish between units.
+    - **DAYS (ימים):** For `vacation_days`, `sick_days`, `holiday_days`, the value should be small (e.g., 1, 2.5, 7).
+    - **PROBLEM EXAMPLE:** If you see "ימי מחלה: 483" or "מחלה: 483", this is **WRONG**. 483 is clearly **MINUTES** or a different field ID.
+    - **YOUR ACTION:** Do **NOT** put 483 in `sick_days`. If you are sure it's minutes, create a *new key* `sick_minutes: 483`. If you are unsure, leave `sick_days` as `null`.
+    - **HOURS (שעות):** For hour fields, the value is usually larger (e.g., 160, 10.5).
+
+4.  **CAPTURE EVERYTHING ELSE (Be Flexible):**
+    - After you secure the required keys, find **ALL OTHER** numeric summaries.
+    - Examples: "ימי הבראה", "שעות כוננות", "מילואים", "בונוס שעות", "סהכ שעות חריגות".
+    - Create *new keys* for them in the JSON output (e.g., `recuperation_days: 5`, `standby_hours: 10.5`, `military_days: 3`, `bonus_hours: 10`).
+    - **DO NOT IGNORE DATA** just because it's not in the required list.
+"""
+    # --- END OF EDITED SECTION 2 ---
+
+    # --- START OF EDITED SECTION 3: Main prompt ---
     prompt = f"""
-You are an expert data extractor for Hebrew time-attendance reports.
+The file being analyzed is named: "{file_name}"
+
+You are an expert data extractor for Hebrew time-attendance reports. You are precise, methodical, and rigid. You follow all rules exactly.
 Use the following list of known Hebrew keywords as a *guide*, not a strict list:
 {KEYWORDS_CONTEXT}
 
@@ -478,7 +504,7 @@ Required JSON keys (extract these AND any others you find):
   "holiday_days": null
 }}
 
-Example output (note the extra 'standby_hours' field):
+Example output (note the extra 'standby_hours' and 'sick_minutes' fields):
 {{
   "employee_name": "ישראל כהן",
   "employee_id": "123456789",
@@ -489,9 +515,10 @@ Example output (note the extra 'standby_hours' field):
   "total_payable_hours": 150,
   "overtime_hours": 10,
   "vacation_days": 2,
-  "sick_days": 1,
+  "sick_days": null,
   "holiday_days": 0,
-  "standby_hours": 10.5
+  "standby_hours": 10.5,
+  "sick_minutes": 483
 }}
 
 Text to analyze:
@@ -499,12 +526,14 @@ Text to analyze:
 {raw_text}
 ---
 """
+    # --- END OF EDITED SECTION 3 ---
+
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",  # Using a smaller model for cost/speed
             messages=[
                 {"role": "system",
-                 "content": "You extract precise structured data from Hebrew attendance reports. Output JSON only. Be flexible and capture all available summary fields."},
+                 "content": "You extract precise structured data from Hebrew attendance reports. Output JSON only. You must be flexible and capture all available summary fields, while strictly following all rules about name correction and data validation."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0
