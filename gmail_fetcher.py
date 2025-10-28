@@ -1,29 +1,3 @@
-# gmail_fetcher.py
-import os
-import imaplib
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-EMAIL_ACCOUNT = os.getenv("GMAIL_EMAIL")
-APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
-
-
-def test_gmail_connection():
-    """Tests basic connection to the Gmail account"""
-    try:
-        mail = imaplib.IMAP4_SSL("imap.gmail.com")
-        mail.login(EMAIL_ACCOUNT, APP_PASSWORD)
-        print("✅ Successfully connected to account:", EMAIL_ACCOUNT)
-        mail.logout()
-    except Exception as e:
-        print("❌ Connection error:", e)
-
-
-if __name__ == "__main__":
-    test_gmail_connection()
-# gmail_fetcher.py
 import os
 import imaplib
 import email
@@ -49,13 +23,16 @@ def fetch_reports_from_gmail():
         # Select the Gmail label instead of inbox
         mail.select('"Timesheet Reports"')
 
-        # Search all messages in that label
-        status, messages = mail.search(None, 'ALL')
+        # Search for all non-deleted messages in that label
+        status, messages = mail.search(None, '(NOT DELETED)')
         if status != "OK":
             print("❌ No messages found.")
             return
 
-        for num in messages[0].split():
+        message_ids = messages[0].split()
+        print(f"🔍 Found {len(message_ids)} messages in label.")
+
+        for num in message_ids:
             _, msg_data = mail.fetch(num, "(RFC822)")
             raw_email = msg_data[0][1]
             msg = email.message_from_bytes(raw_email)
@@ -76,7 +53,7 @@ def fetch_reports_from_gmail():
                     if isinstance(decoded_filename, bytes):
                         decoded_filename = decoded_filename.decode(enc or "utf-8", errors="ignore")
 
-                    if decoded_filename.lower().endswith((".pdf", ".xlsx", ".csv")):
+                    if decoded_filename.lower().endswith((".pdf", ".xlsx", ".csv", ".xls")):
                         filepath = DOWNLOAD_DIR / decoded_filename
                         with open(filepath, "wb") as f:
                             f.write(part.get_payload(decode=True))

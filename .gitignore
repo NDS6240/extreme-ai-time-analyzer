@@ -4,5 +4,7 @@ __pycache__/
 Training_forms/
 zones_templates/
 *.env
+employee_registry.csv
+employee_registry.json
 downloads/
 tokens/

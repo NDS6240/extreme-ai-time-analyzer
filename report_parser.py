@@ -1,7 +1,7 @@
-# report_parser.py
 import os
 import re
 import json
+import difflib
 import pdfplumber
 import pandas as pd
 from pathlib import Path
@@ -20,19 +20,29 @@ if not API_KEY:
     raise ValueError("Error: 'OPENAI_API_KEY' not found in .env file.")
 client = OpenAI(api_key=API_KEY)
 
+# --- DEBUG Flag ---
+# Set DEBUG=true in .env file to enable verbose logging
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 ALL_RESULTS = []
+
+# --- Load Employee Names List Globally (as requested) ---
+EMPLOYEE_NAMES = []
+try:
+    with open("terms_dictionary.json", "r", encoding="utf-8") as f:
+        # Use .get() for safety, default to empty list if key missing
+        EMPLOYEE_NAMES = json.load(f).get("employee_names", [])
+        if DEBUG and EMPLOYEE_NAMES:
+            print(f"💡 Loaded {len(EMPLOYEE_NAMES)} names into backup list.")
+except Exception as e:
+    print(f"⚠️ Could not load 'employee_names' from terms_dictionary.json: {e}")
+    EMPLOYEE_NAMES = []  # Ensure it's a list on failure
 
 # =========================
 #  Known Hebrew Keywords Context
 # =========================
 KEYWORDS_CONTEXT = """
 Known Hebrew keywords by category:
-
-1. פרטי עובד (Employee Details):
-   - שם העובד, שם פרטי, שם משפחה, מספר עובד, מספר תעודת זהות, מזהה עובד, מזהה, מחלקה, תפקיד, מס' עובד, שם:, לשם העובד:, Employee Name:, Employee:, שם משפחה:, שם פרטי:
-
-2. סיכום שעות (Hours Summary):
-   - סה"כ שעות נוכחות, שעות עבודה, סה"כ שעות, שעות מאושרות, שעות לתשלום, שעות לתשלום כולל, סה"כ שעות לתשלום, סה"כ שעות מאושרות
 ... [וכו']
 """
 
@@ -47,12 +57,12 @@ def _looks_unreadable(txt: str) -> bool:
     Heuristic to decide if PDF text is garbled/empty and needs OCR.
     """
     t = (txt or "").strip()
-    if len(t) < 80:
+    if len(t) < 30:
         return True
     heb = len(_HEB_CHARS.findall(t))
     # ratio of hebrew letters to total characters
     ratio = heb / max(len(t), 1)
-    if ratio < 0.03:  # almost no Hebrew detected
+    if ratio < 0.005:  # almost no Hebrew detected
         return True
     # Many colons/slashes and few letters is a common artifact
     punct = sum(t.count(x) for x in [":", "/", "\\", "*"])
@@ -218,6 +228,8 @@ def _preextract_numeric_summary(text: str) -> dict:
 def _find_name_with_regex(text: str) -> str | None:
     """Try to find the employee name using a series of robust regex patterns."""
 
+    # --- Uses global EMPLOYEE_NAMES list (loaded once) ---
+
     NAME_BLACKLIST = [
         "דוח", "דו\"ח", "נוכחות", "מערכת", "גליון", "מורחב", "כרטיס", "מספר", "דף",
         "אישור", "שעות", "סיכום", "טופס", "כניסה", "יציאה", "הערות", "בנק", "חברה",
@@ -233,24 +245,21 @@ def _find_name_with_regex(text: str) -> str | None:
     clean_text = text.replace('"', ' ').replace(',', ' ')
 
     # === Capture group: 2 or 3 Hebrew words, allowing "'-" ===
-    # Word: [א-ת\'-]{2,}
-    # Name: Word (\s+ Word){1,2} --> ensures 2 or 3 words
     name_capture_2_3_words = r"([א-ת\'-]{2,}(?:\s+[א-ת\'-]{2,}){1,2})"
 
     # === Single word capture (for partial matches) ===
     name_capture_1_word = r"([א-ת\'-]{2,})"
 
-
     patterns = [
         # --- Specific Patterns First ---
         # 1. Mini Grinblat pattern: "לעובד [Name] [ID]" (stricter capture)
-        r"לעובד\s+([א-ת]{2,}\s+[א-ת]{2,})\s+\d{8,9}", # Expect exactly 2 words
+        r"לעובד\s+([א-ת]{2,}\s+[א-ת]{2,})\s+\d{8,9}",  # Expect exactly 2 words
         # 2. Anat Hazan-Yehuda pattern: "[ID] [Name]" (stricter capture)
-        r"\d{8,9}\s+([א-ת]{2,}\s+[א-ת-]{2,})", # Expect 2 words, allow hyphen in second
+        r"\d{8,9}\s+([א-ת]{2,}\s+[א-ת-]{2,})",  # Expect 2 words, allow hyphen in second
         # 3. Haim Tirosh pattern: "[Name] [ID] עובד" (stricter capture)
-        r"([א-ת]{2,}\s+[א-ת]{2,})\s+\d{5,}\s+עובד", # Expect exactly 2 words
+        r"([א-ת]{2,}\s+[א-ת]{2,})\s+\d{5,}\s+עובד",  # Expect exactly 2 words
         # 4. Sheri Avni pattern: "[Word] שם העובד : [Word]"
-        r"([א-ת\'-]{2,})\s+שם העובד\s*:\s*([א-ת\'-]{2,})", # Special: 2 capture groups
+        r"([א-ת\'-]{2,})\s+שם העובד\s*:\s*([א-ת\'-]{2,})",  # Special: 2 capture groups
 
         # --- General Patterns (using 2-3 word capture) ---
         # Key: Name
@@ -276,16 +285,13 @@ def _find_name_with_regex(text: str) -> str | None:
     ]
 
     # --- Iterate through patterns ---
-    # Store potential matches and validate them *after* trying all patterns
     potential_matches = []
 
     for i, pattern in enumerate(patterns):
         try:
-            # Use finditer to catch ALL matches for a pattern, not just the first
             for m in re.finditer(pattern, clean_text):
                 # Special handling for Sheri Avni pattern
-                if i == 3: # Index of the special pattern
-                    # Ensure both groups were captured
+                if i == 3:  # Index of the special pattern
                     if m.group(1) and m.group(2):
                         name = f"{m.group(1).strip()} {m.group(2).strip()}"
                         potential_matches.append(name)
@@ -294,46 +300,73 @@ def _find_name_with_regex(text: str) -> str | None:
                     name = m.group(1).strip()
                     potential_matches.append(name)
 
-        except re.error: continue
-        except IndexError: continue # Should not happen with careful group indexing
+        except re.error:
+            continue
+        except IndexError:
+            continue
 
-    # --- Validate potential matches ---
+        # --- Validate potential matches ---
     if not potential_matches:
-        print(f"⚠️ Regex found no potential name matches for snippet: {clean_text[:100]}")
-        return None
+        if DEBUG: print(f"ℹ️ Regex found no potential name matches for snippet: {clean_text[:100]}")
+        # Do not return yet, try backup list
+    else:
+        potential_matches.sort(key=len, reverse=True)
 
-    # Sort matches (e.g., prefer longer names, or based on pattern index - earlier is better)
-    # Simple sort: longest first
-    potential_matches.sort(key=len, reverse=True)
+        # Validate the best matches against the blacklist
+        for name in potential_matches:
+            if not name or len(name) < 2: continue
 
-    # Validate the best matches against the blacklist
-    for name in potential_matches:
-        if not name or len(name) < 2: continue
+            name_parts = name.split()
+            if not name_parts: continue
 
-        name_parts = name.split()
-        if not name_parts: continue
+            is_valid_name = True
+            for part in name_parts:
+                if part in NAME_BLACKLIST:
+                    is_valid_name = False
+                    break
+                if not re.search(r"[א-ת]", part):
+                    is_valid_name = False
+                    break
+                if len(part) < 2 and part != '-':
+                    is_valid_name = False
+                    break
 
-        is_valid_name = True
-        for part in name_parts:
-            # 1. Check blacklist
-            if part in NAME_BLACKLIST:
-                is_valid_name = False
-                break
-            # 2. Check if part is just numbers or junk
-            if not re.search(r"[א-ת]", part):
-                is_valid_name = False
-                break
-            # 3. Check length (avoid single letters unless it's like '-')
-            if len(part) < 2 and part != '-':
-                is_valid_name = False
-                break
+            if is_valid_name:
+                if DEBUG: print(f"✅ Regex selected valid name: '{name}'")
+                return name  # Return the first valid name found (primary success)
 
-        if is_valid_name:
-            print(f"✅ Regex selected valid name: '{name}'")
-            return name # Return the first valid name found
+    # If all potential matches failed validation (or none found)
+    if DEBUG: print(f"ℹ️ Regex failed validation or found no matches. Trying backup list...")
 
-    # If all potential matches failed validation
-    print(f"⚠️ Regex found matches ({potential_matches}), but all were filtered by blacklist/validation.")
+    # === Backup: Try to match with employee_names list using close matching ===
+    # Only if regex failed to find a valid name
+    if EMPLOYEE_NAMES:  # Use the global list
+        two_word_pat = re.compile(r"([א-ת\'-]{2,}\s+[א-ת\'-]{2,})")
+        three_word_pat = re.compile(r"([א-ת\'-]{2,}\s+[א-ת\'-]{2,}\s+[א-ת\'-]{2,})")
+        candidates = set()
+        for m in three_word_pat.finditer(clean_text):
+            candidates.add(m.group(1).strip())
+        for m in two_word_pat.finditer(clean_text):
+            candidates.add(m.group(1).strip())
+
+        for cand in sorted(candidates, key=len, reverse=True):
+            is_blacklisted = False
+            for part in cand.split():
+                if part in NAME_BLACKLIST:
+                    is_blacklisted = True
+                    break
+            if is_blacklisted:
+                continue
+
+                # Use global list and new cutoff=0.8
+            matches = difflib.get_close_matches(cand, EMPLOYEE_NAMES, n=1, cutoff=0.8)
+            if matches:
+                match = matches[0]
+                if DEBUG: print(f"✅ Found match from employee_names list (backup): {match}")
+                return match  # Return backup match
+
+    # All methods failed
+    print(f"❌ All name extraction methods (Regex + Backup List) failed.")
     return None
 
 
@@ -360,14 +393,25 @@ def _analyze_text_with_llm(raw_text: str, file_name: str, hints: dict | None = N
             hints_text = "\n\nNumeric hints extracted from report text:\n" + "\n".join(hints_lines) + "\n"
 
     # --- New Name Hint Logic (with Blacklist) ---
-
-    # === "מילון מוקשים" ל-LLM (subset for prompt clarity) ===
     blacklist_str = ", ".join([
         "דוח", "נוכחות", "מערכת", "גליון", "מורחב", "כרטיס", "מספר", "דף",
         "אישור", "שעות", "בנק", "חברה", "בעמ", "אקסטרים", "לודן", "דיסקונט",
         "עובד", "עובדת", "מחלקה", "תאריך", "אגף", "אזור", "ףד", "רפסמ", "תכרעמ", "דבוע ", "סיטרכ", "דבוע", "חוד",
-        "אסמכת", "אתכמסא" # Added from logs
+        "אסמכת", "אתכמסא"
     ])
+
+    # --- New: Add known names list instruction (as requested) ---
+    known_names_instruction = ""
+    if EMPLOYEE_NAMES:
+        # Create a comma-separated string, limit to ~500 chars for prompt safety
+        names_str = ", ".join(EMPLOYEE_NAMES)
+        if len(names_str) > 500:
+            names_str = names_str[:500] + "..."
+        known_names_instruction = f"""
+When identifying "employee_name", you can also use this list of known employee names as a reference.
+The name in the text might be a close match, not an exact one.
+Known names: [{names_str}]
+"""
 
     name_instruction = ""
     if name_hint:
@@ -378,17 +422,16 @@ When identifying "employee_name":
 - Your job is to 1) Fix its RTL order if reversed, and 2) Complete it if it's partial.
 
 - **CRITICAL: If the hint itself contains forbidden words like 'עובד', 'כרטיס', 'דוח', 'נוכחות', 'אסמכת', IGNORE THE HINT and find the real name yourself.** Forbidden words list: {blacklist_str}.
-- **RTL FIX:** If the hint is reversed (e.g., "ןהכ לארשי" or "טלבנירג ינימ"), you must output the correct version (e.g., "ישראל כהן" or "מיני גרינבלט").
-- **COMPLETION FIX:** If the hint is a single name (e.g., "אבני"), look in the text for the *other part* of the name nearby (e.g., "שרי" appears before "שם העובד : אבני"). The final name should be "שרי אבני".
+- **RTL FIX:** If the hint is reversed (e.g., "ןהכ לארשי"), you must output the correct version (e.g., "ישראל כהן").
 - **LTR FIX:** If the hint is "תירוש חיים", it's LTR. Fix it to "חיים תירוש".
-- If the hint is already correct (e.g., "אביה אלטויל", "ענת חזן-יהודה"), output it as is.
+- If the hint is already correct (e.g., "אביה אלטויל"), output it as is.
 """
     else:
         # If Regex failed, tell the LLM to find it (and avoid headers).
         name_instruction = f"""
 When identifying "employee_name":
-- **Regex failed.** You must find the name manually.
-- Look for labels like "שם העובד", "עובד:", or a name near an ID number (e.g., "027321058 ענת חזן-יהודה").
+- **Regex and Backup List failed.** You must find the name manually.
+- Look for labels like "שם העובד", "עובד:", or a name near an ID number.
 - **CRITICAL: AVOID** extracting general titles, labels, or company names.
 - **DO NOT EXTRACT THESE WORDS (THE "MINEFIELD"):** {blacklist_str}.
 - Focus on actual human names (2-3 words).
@@ -396,19 +439,31 @@ When identifying "employee_name":
 """
     # --- End New Name Logic ---
 
+    flexibility_instruction = """
+IMPORTANT: The report text may contain many different types of hour summaries (e.g., "שעות נוספות 125%", "שעות חג", "שעות מילואים", "שעות מחלה") or day summaries (e.g., "ימי חופשה", "ימי מחלה").
+The JSON keys provided are the *minimum required*.
+You *must* identify ALL numeric summary fields present in the text, even if they are not in the required list.
+For example, if you find "שעות כוננות: 10.5" and "ימי הבראה: 3", you must include them.
+Try to map them to the *closest* required key if possible (e.g., "ימי חופשה" -> "vacation_days").
+If a clear mapping is not possible (e.g., "שעות כוננות"), create a *new key* for it in the JSON output (e.g., "standby_hours": 10.5).
+Be flexible and do not ignore data just because it doesn't match the exact keywords.
+"""
+
     prompt = f"""
 You are an expert data extractor for Hebrew time-attendance reports.
-Use the following list of known Hebrew keywords to identify relevant fields:
+Use the following list of known Hebrew keywords as a *guide*, not a strict list:
 {KEYWORDS_CONTEXT}
 
+{known_names_instruction}
 {name_instruction}
 {hints_text}
+{flexibility_instruction}
 
 Given the following report text (Hebrew, may include tables), extract the fields below.
 If a field is not present, return null for that field.
 Return ONLY valid JSON (no comments, no markdown fences).
 
-Required JSON keys (exactly these):
+Required JSON keys (extract these AND any others you find):
 {{
   "employee_name": null,
   "employee_id": null,
@@ -423,7 +478,7 @@ Required JSON keys (exactly these):
   "holiday_days": null
 }}
 
-Example output:
+Example output (note the extra 'standby_hours' field):
 {{
   "employee_name": "ישראל כהן",
   "employee_id": "123456789",
@@ -435,7 +490,8 @@ Example output:
   "overtime_hours": 10,
   "vacation_days": 2,
   "sick_days": 1,
-  "holiday_days": 0
+  "holiday_days": 0,
+  "standby_hours": 10.5
 }}
 
 Text to analyze:
@@ -445,10 +501,10 @@ Text to analyze:
 """
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o-mini",  # Using a smaller model for cost/speed
             messages=[
                 {"role": "system",
-                 "content": "You extract precise structured data from Hebrew attendance reports. Output JSON only."},
+                 "content": "You extract precise structured data from Hebrew attendance reports. Output JSON only. Be flexible and capture all available summary fields."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0
@@ -457,14 +513,17 @@ Text to analyze:
         # Strip possible fences if any
         cleaned = response_text.replace("```json", "").replace("```", "").strip()
         data = json.loads(cleaned)
-        # minimal sanity: ensure all keys exist
+
+        # We no longer strictly enforce *only* the expected keys.
+        # We just ensure the minimum keys are present (set to null if missing)
         expected = [
             "employee_name", "employee_id", "employee_number", "report_month",
             "total_presence_hours", "total_approved_hours", "total_payable_hours",
             "overtime_hours", "vacation_days", "sick_days", "holiday_days"
         ]
         for k in expected:
-            data.setdefault(k, None)
+            data.setdefault(k, None)  # Add key if missing
+
         return data
     except json.JSONDecodeError:
         print(
@@ -490,102 +549,101 @@ def parse_report(file_path: str) -> dict:
         "employee_name": None,
         "employee_id": None,
         "report_period": None,  # maintained for main.py compatibility
-        "report_summary": None  # will hold a dict of totals if present
+        "report_summary": None  # will hold a dict of all totals
     }
 
-    # 1) Extract raw text
-    if p.suffix.lower() == ".pdf":
-        raw_text = _extract_text_from_pdf(file_path)
-        if _looks_unreadable(raw_text):
-            print(f"⚠️ {file_name}: PDF text unreadable — using OCR fallback.")
-            raw_text = extract_text_with_ocr(file_path)
-    elif p.suffix.lower() in [".xlsx", ".xls", ".csv"]:
-        raw_text = _extract_text_from_excel_or_csv(file_path)
-    else:
-        print(f"--- Skipping unsupported file type: {file_name} ---")
-        return result
-
-    # Normalize terms for numeric extraction
-    normalized_text = normalize_terms(raw_text)
-    numeric_hints = _preextract_numeric_summary(normalized_text)
-
-    # Convert values to floats
-    for k, v in numeric_hints.items():
-        if v is not None:
-            numeric_hints[k] = float(v)
-
-    # === NEW: Try to find name with Regex FIRST ===
-    # We use the *original* raw_text for this
-    name_hint_from_regex = _find_name_with_regex(raw_text)
-    # This print moved inside the function now
-
-    # 2) LLM analysis → structured JSON
-    llm = _analyze_text_with_llm(
-        raw_text,
-        file_name,
-        hints=numeric_hints,
-        name_hint=name_hint_from_regex
-    )
-    if not llm:
-        return result
-
-    # 3) Map to expected shape for main.py
-    result["employee_name"] = llm.get("employee_name")
-    result["employee_id"] = llm.get("employee_id") or llm.get("employee_number")
-    result["report_period"] = llm.get("report_month")
-
-    # Build a lightweight summary dict
-    result["report_summary"] = {
-        "total_presence_hours": llm.get("total_presence_hours"),
-        "total_approved_hours": llm.get("total_approved_hours"),
-        "total_payable_hours": llm.get("total_payable_hours"),
-        "overtime_hours": llm.get("overtime_hours"),
-        "vacation_days": llm.get("vacation_days"),
-        "sick_days": llm.get("sick_days"),
-        "holiday_days": llm.get("holiday_days"),
-    }
-
-    # --- Override LLM hour summary with pre-extracted hints if they exist ---
-    for key in result["report_summary"].keys():
-        if key in numeric_hints and numeric_hints[key] is not None:
-            if result["report_summary"][key] is None or result["report_summary"][key] != numeric_hints[key]:
-                result["report_summary"][key] = numeric_hints[key]
-
-    # --- Auto-export result to CSV for debugging/inspection ---
     try:
-        out_folder = Path(file_path).parent
-        base_name = Path(file_path).stem
-        # Avoid double extensions like .pdf_parsed.csv
-        if base_name.endswith(p.suffix):
-             base_name = base_name[:-len(p.suffix)]
-        csv_path = out_folder / f"{base_name}_parsed.csv"
+        # 1) Extract raw text
+        suffix = p.suffix.lower().strip()
+        supported_types = [".pdf", ".xlsx", ".xls", ".xlsm", ".csv"]
+        if suffix not in supported_types:
+            print(f"--- Skipping unsupported file type: {file_name} ---")
+            return result
 
+        try:
+            if suffix == ".pdf":
+                raw_text = _extract_text_from_pdf(file_path)
+                if _looks_unreadable(raw_text) or not raw_text.strip():
+                    print(f"⚠️ {file_name}: PDF unreadable or empty — forcing OCR.")
+                    raw_text = extract_text_with_ocr(file_path)
+            else:
+                raw_text = _extract_text_from_excel_or_csv(file_path)
+        except Exception as e:
+            print(f"⚠️ {file_name}: Error reading file — {e}")
+            raw_text = ""
 
-        import csv
-        csv_row = result.copy()
-        summary = csv_row.pop("report_summary", {}) or {}
-        for k, v in summary.items():
-            csv_row[k] = v
+        # Safeguard: OCR fallback for empty text after reading
+        if not raw_text.strip():
+            print(f"⚠️ {file_name}: Empty text detected — forcing OCR as last resort.")
+            raw_text = extract_text_with_ocr(file_path)
 
-        # Ensure all expected keys exist for the DictWriter
-        all_keys = list(result.keys()) + list(summary.keys())
-        # Filter out 'report_summary' itself if it was somehow left
-        all_keys = [k for k in all_keys if k != "report_summary"]
-        all_keys = sorted(list(set(all_keys))) # Get unique sorted keys
+        if not (raw_text or "").strip():
+            print(f"--- Skipping empty file: {file_name} ---")
+            return result
 
-        with open(csv_path, "w", encoding="utf-8", newline='') as cf:
-            writer = csv.DictWriter(cf, fieldnames=all_keys)
-            writer.writeheader()
-            # Prepare row for writer, ensuring only keys in fieldnames are written
-            row_to_write = {k: csv_row.get(k) for k in all_keys}
-            writer.writerow(row_to_write)
-        print(f"✅ Parsed result exported to CSV: {csv_path}")
+        # Normalize terms for numeric extraction
+        normalized_text = normalize_terms(raw_text)
+        numeric_hints = _preextract_numeric_summary(normalized_text)
+
+        # Convert values to floats
+        for k, v in numeric_hints.items():
+            if v is not None:
+                numeric_hints[k] = float(v)
+
+        # === NEW: Try to find name with Regex FIRST (with list backup) ===
+        name_hint_from_regex = _find_name_with_regex(raw_text)
+
+        # 2) LLM analysis → structured JSON
+        llm_data = _analyze_text_with_llm(
+            raw_text,
+            file_name,
+            hints=numeric_hints,
+            name_hint=name_hint_from_regex
+        )
+        if not llm_data:
+            return result  # Failed LLM analysis
+
+        # 3) Map to expected shape for main.py
+        result["employee_name"] = llm_data.pop("employee_name", None)
+        result["employee_id"] = llm_data.pop("employee_id", None) or llm_data.pop("employee_number", None)
+        result["report_period"] = llm_data.pop("report_month", None)
+
+        # --- Build the summary dict ---
+        # (Keys that are always expected, even if null)
+        summary_keys = [
+            "total_presence_hours", "total_approved_hours", "total_payable_hours",
+            "overtime_hours", "vacation_days", "sick_days", "holiday_days"
+        ]
+        report_summary = {}
+
+        # Add the minimum required keys first
+        for k in summary_keys:
+            report_summary[k] = llm_data.pop(k, None)
+
+        # Add any *other* keys the LLM found (for flexibility)
+        # This loop takes remaining items from llm_data
+        for k, v in llm_data.items():
+            if isinstance(v, (int, float)) or (isinstance(v, str) and v.replace('.', '', 1).isdigit()):
+                report_summary[k] = v
+
+        result["report_summary"] = report_summary
+
+        # --- Override LLM hour summary with pre-extracted hints if they exist ---
+        for key in result["report_summary"].keys():
+            if key in numeric_hints and numeric_hints[key] is not None:
+                if result["report_summary"][key] is None or result["report_summary"][key] != numeric_hints[key]:
+                    if DEBUG: print(f"💡 Overriding '{key}' with pre-extracted hint: {numeric_hints[key]}")
+                    result["report_summary"][key] = numeric_hints[key]
+
+        # --- ייצוא CSV נפרד בוטל ---
+        # The logic for exporting individual CSV/JSON files here has been removed.
+
+        ALL_RESULTS.append(result)
+
+        return result
     except Exception as e:
-        print(f"⚠️ Failed to export parsed result for {file_path}: {e}")
-
-    ALL_RESULTS.append(result)
-
-    return result
+        print(f"❌ Error parsing {file_name}: {e}")
+        return result
 
 
 # (No __main__ block – main.py runs this module.)
@@ -594,6 +652,7 @@ def export_all_results():
     """
     Export the entire ALL_RESULTS list into a single JSON and CSV file
     in the current working directory.
+    (Note: This function is not called by main.py, which uses export_to_excel.py)
     """
     if not ALL_RESULTS:
         print("⚠️ No results to export in export_all_results().")
@@ -609,20 +668,19 @@ def export_all_results():
         for res in ALL_RESULTS:
             row = res.copy()
             summary = row.pop("report_summary", {}) or {}
-            for k, v in summary.items():
-                row[k] = v
+            if summary:  # Ensure summary is not None
+                for k, v in summary.items():
+                    row[k] = v
             csv_rows.append(row)
             all_fieldnames.update(row.keys())
 
-        # Ensure consistent order based on the final set of all keys
-        fieldnames = sorted(list(all_fieldnames))
+        fieldnames = sorted([k for k in all_fieldnames if k != "report_summary"])
 
         with open(csv_path, "w", encoding="utf-8", newline='') as cf:
             writer = csv.DictWriter(cf, fieldnames=fieldnames)
             writer.writeheader()
             for row in csv_rows:
-                # Ensure only keys present in fieldnames are written
-                row_to_write = {k: row.get(k) for k in fieldnames}
+                row_to_write = {k: row.get(k) for k in fieldnames if k in row}
                 writer.writerow(row_to_write)
         print(f"✅ Consolidated parsed results exported to CSV: {csv_path}")
 
