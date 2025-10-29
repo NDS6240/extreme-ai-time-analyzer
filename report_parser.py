@@ -366,7 +366,7 @@ def _find_name_with_regex(text: str) -> str | None:
                 return match  # Return backup match
 
     # All methods failed
-    print(f"❌ All name extraction methods (Regex + Backup List) failed.")
+    print(f" :-( All name extraction methods (Regex + Backup List) failed.")
     return None
 
 

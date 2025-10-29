@@ -6,5 +6,6 @@ zones_templates/
 *.env
 employee_registry.csv
 employee_registry.json
+credentials.json
 downloads/
 tokens/

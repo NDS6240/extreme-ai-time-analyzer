@@ -4,6 +4,7 @@ from report_parser import parse_report  # Import the new LLM-based parser
 from pathlib import Path
 from report_parser import ALL_RESULTS
 from export_to_excel import export_summary_excel
+from google_sheets_updater import update_google_sheets
 
 if __name__ == "__main__":
     print("📩 Fetching new reports from Gmail...")
@@ -41,3 +42,4 @@ if __name__ == "__main__":
     print("\n✅ Process complete.")
 
     export_summary_excel(ALL_RESULTS)
+    update_google_sheets(ALL_RESULTS)
