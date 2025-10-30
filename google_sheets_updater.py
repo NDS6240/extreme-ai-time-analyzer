@@ -14,6 +14,9 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive.file"
 ]
 
+# --- NEW: Define target column name ---
+TARGET_COLUMN_TITLE = "שעות בפועל"
+
 
 # --- Authentication ---
 def authenticate():
@@ -31,7 +34,7 @@ def authenticate():
         return None
 
 
-# --- Deduplication Logic ---
+# --- Deduplication Logic (Unchanged from original) ---
 def deduplicate_results(all_results):
     """
     Cleans the results list using smart deduplication before uploading.
@@ -100,10 +103,11 @@ def deduplicate_results(all_results):
     return final_results
 
 
-# --- Main Update Function ---
+# --- Main Update Function (MODIFIED) ---
 def update_google_sheets(all_results):
     """
     Main function: uploads processed results to Google Sheets.
+    MODIFIED: Only updates the 'שעות בפועל' column, but still creates new tabs from master.
     """
     print("\n🔄 Starting Google Sheets update...")
 
@@ -111,14 +115,14 @@ def update_google_sheets(all_results):
     if not client:
         return
 
-    # 1. Deduplicate results
+    # 1. Deduplicate results (remains the same, gets full data)
     print("   - Performing deduplication...")
     clean_results = deduplicate_results(all_results)
     if not clean_results:
         print("⚠️ No data to update in Google Sheets (list is empty after cleaning).")
         return
 
-    # Determine report period from the first result (with fallback)
+    # Determine report period (remains the same)
     report_period = None
     for res in clean_results:
         report_period = res.get('report_period')
@@ -128,8 +132,6 @@ def update_google_sheets(all_results):
     if not report_period:
         print("⚠️ Cannot determine report period from results. Stopping.")
         return
-
-    # Clean the report period name
     report_period = re.sub(r'[\"\',]', '', str(report_period)).strip()
     if not report_period:
         print("⚠️ Report period name is invalid after cleaning. Stopping.")
@@ -143,14 +145,14 @@ def update_google_sheets(all_results):
         master_sheet = client.open_by_url(MASTER_SHEET_URL)
         data_sheet = client.open_by_url(DATA_SHEET_URL)
 
-        # 3. Read employee list from Master
+        # 3. Read employee list from Master (remains the same)
         try:
             master_ws = master_sheet.get_worksheet(0)  # First tab
             master_data = master_ws.get_all_values()
             if not master_data:
                 print("⚠️ Master sheet is empty. Cannot create template.")
                 return
-            master_headers = master_data[0]
+            master_headers = master_data[0] # Now includes 'תקן שעות'
             master_employees_rows = master_data[1:]
             master_employee_names = [row[0] for row in master_employees_rows if row]
             print(f"   - {len(master_employee_names)} employees loaded from master.")
@@ -159,7 +161,7 @@ def update_google_sheets(all_results):
             print("   - Ensure the master sheet is set up with columns in the first tab.")
             return
 
-        # 4. Check/Create monthly tab
+        # 4. Check/Create monthly tab (MODIFIED)
         try:
             monthly_ws = data_sheet.worksheet(report_period)
             print(f"   - Sheet '{report_period}' exists. Updating data...")
@@ -167,21 +169,15 @@ def update_google_sheets(all_results):
             print(f"   - Sheet '{report_period}' not found. Creating new sheet...")
             monthly_ws = data_sheet.add_worksheet(title=report_period, rows=100, cols=30)
 
-            # Create headers in the new sheet
+            # --- Create headers in the new sheet (MODIFIED) ---
+            # 'תקן שעות' is now part of master_headers
             data_headers = master_headers + [
-                'file', 'employee_id', 'total_presence_hours', 'total_approved_hours',
-                'total_payable_hours', 'overtime_hours', 'vacation_days',
-                'sick_days', 'holiday_days'
+                # 'תקן שעות', <-- REMOVED! It will be copied from master_headers
+                TARGET_COLUMN_TITLE, # 'שעות בפועל'
+                'file', # For debugging
+                'employee_id' # For debugging
             ]
-            # Add dynamic fields from results
-            all_summary_keys = set()
-            for res in clean_results:
-                all_summary_keys.update(res.get('report_summary', {}).keys())
-
-            for key in sorted(list(all_summary_keys)):  # Sort for consistent order
-                if key not in data_headers:
-                    data_headers.append(key)
-
+            
             monthly_ws.append_row(data_headers)
 
             # Copy employee list from master
@@ -189,7 +185,7 @@ def update_google_sheets(all_results):
                 monthly_ws.append_rows(master_employees_rows)
             print(f"   - Sheet '{report_period}' created with {len(master_employees_rows)} employees.")
 
-        # 5. Map data for update
+        # 5. Map data for update (MODIFIED)
         print("   - Mapping updated data...")
 
         all_data = monthly_ws.get_all_values()
@@ -198,27 +194,26 @@ def update_google_sheets(all_results):
             return
 
         headers = all_data[0]
-
-        # Build column map (header_name -> index)
         col_map = {header.strip(): i + 1 for i, header in enumerate(headers)}  # +1 for gspread
-
-        # Assumes first col in master is the name
-        master_name_col_header = master_headers[0]
+        master_name_col_header = master_headers[0] # e.g., "שם עובד"
+        
+        # --- Critical check for required columns ---
         if master_name_col_header not in col_map:
             print(f"❌ Cannot find name column '{master_name_col_header}' in data sheet. Check setup.")
             return
+        if TARGET_COLUMN_TITLE not in col_map:
+            print(f"❌ Cannot find target column '{TARGET_COLUMN_TITLE}' in data sheet. Check setup.")
+            return
 
-        # Build row map (employee_name -> row_number)
-        # --- התיקון גם כאן - לנרמל את השמות מגיליון המאסטר ---
+        # Build row map (employee_name -> row_number) (remains the same)
         row_map = {}
         for i, row in enumerate(all_data[1:], start=2):  # +1 for header skip, start=2 for gspread
             if len(row) > (col_map[master_name_col_header] - 1):
-                employee_name = row[col_map[master_name_col_header] - 1].strip()  # -1 for list index
+                employee_name = row[col_map[master_name_col_header] - 1].strip()
                 if employee_name:
-                    # נרמול השם מגיליון המאסטר
                     name_norm = re.sub(r'[-"\']', ' ', employee_name)
                     name_norm = re.sub(r'\s+', ' ', name_norm).strip()
-                    if name_norm not in row_map:  # שמור רק את המופע הראשון
+                    if name_norm not in row_map:
                         row_map[name_norm] = i
 
         updates_to_send = []
@@ -228,53 +223,54 @@ def update_google_sheets(all_results):
             if not name:
                 continue
 
-            # Normalize name for matching
-            # --- התיקון נמצא כאן ---
-            name_norm = re.sub(r'[-"\']', ' ', name.strip())  # החלף מקף/גרש ברווח
-            name_norm = re.sub(r'\s+', ' ', name_norm).strip()  # נקה רווחים כפולים
-            # --- סוף התיקון ---
+            # Normalize name for matching (remains the same)
+            name_norm = re.sub(r'[-"\']', ' ', name.strip())
+            name_norm = re.sub(r'\s+', ' ', name_norm).strip()
 
-            row_num = row_map.get(name_norm)  # נסה למצוא התאמה בשם המנורמל
-
+            row_num = row_map.get(name_norm)
             if not row_num:
-                row_num = row_map.get(name.strip())  # נסה למצוא התאמה בשם המדויק
+                row_num = row_map.get(name.strip())
                 if not row_num:
-                    # בדוק אם השם קיים במאסטר אך לא זוהה
+                    # Logic for adding new employee if not found (remains the same)
                     if name_norm in [re.sub(r'\s+', ' ', re.sub(r'[-"\']', ' ', n)).strip() for n in
                                      master_employee_names]:
                         print(
                             f"   - ⚠️ Warning: Employee '{name}' ({name_norm}) is in master but not found in sheet row map. Check for duplicates in sheet.")
-                        continue  # דלג על עובד זה כדי למנוע הוספה כפולה
+                        continue
                     else:
                         print(f"   - ℹ️ New employee '{name}' not found in master, adding to sheet.")
                         new_row_data = ["" for _ in headers]
                         new_row_data[col_map[master_name_col_header] - 1] = name.strip()
                         monthly_ws.append_row(new_row_data)
-                        row_num = len(all_data) + 1  # New row number
-                        all_data.append(new_row_data)  # Update internal map
-                        row_map[name_norm] = row_num  # הוסף את הגרסה המנורמלת למפה
+                        row_num = len(all_data) + 1
+                        all_data.append(new_row_data)
+                        row_map[name_norm] = row_num
 
-            if row_num:  # ודא שיש לנו מספר שורה תקין
-                # Update base fields
-                base_fields = {'file': result.get('file'), 'employee_id': result.get('employee_id')}
-                for field, value in base_fields.items():
-                    if field in col_map and value is not None:
-                        col_num = col_map[field]
-                        updates_to_send.append(gspread.Cell(row_num, col_num, str(value)))
+            # --- SIMPLIFIED UPDATE LOGIC (THE CORE CHANGE) ---
+            if row_num:
+                
+                # 1. Update 'file' column (if it exists)
+                file_val = result.get('file')
+                if 'file' in col_map and file_val is not None:
+                    col = col_map['file']
+                    updates_to_send.append(gspread.Cell(row_num, col, str(file_val)))
 
-                # Update summary fields
+                # 2. Update 'employee_id' column (if it exists)
+                id_val = result.get('employee_id')
+                if 'employee_id' in col_map and id_val is not None:
+                    col = col_map['employee_id']
+                    updates_to_send.append(gspread.Cell(row_num, col, str(id_val)))
+
+                # 3. Update 'שעות בפועל' (TARGET_COLUMN_TITLE) column
+                # We get the full summary, but only use one value from it
                 summary = result.get('report_summary', {})
-                for key, value in summary.items():
-                    if key not in col_map:
-                        # New column found, add it to sheet
-                        print(f"   - ℹ️ New column '{key}' found. Adding to sheet.")
-                        headers.append(key)
-                        col_map[key] = len(headers)
-                        monthly_ws.update_cell(1, col_map[key], key)  # Update header row
-
-                    if value is not None:
-                        col_num = col_map[key]
-                        updates_to_send.append(gspread.Cell(row_num, col_num, str(value)))
+                hours_val = summary.get('total_presence_hours') # <-- The specific value
+                
+                if hours_val is not None:
+                    col = col_map[TARGET_COLUMN_TITLE]
+                    updates_to_send.append(gspread.Cell(row_num, col, str(hours_val)))
+                
+                # --- REMOVED: Loop for all other summary.items() ---
 
         # Send all updates in one batch
         if updates_to_send:
@@ -284,5 +280,4 @@ def update_google_sheets(all_results):
             print("✅ Google Sheets is already up to date. No changes.")
 
     except Exception as e:
-        # This will now print the full error
         print(f"❌ General error during Google Sheets update: {repr(e)}")

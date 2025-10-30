@@ -7,9 +7,21 @@ import pandas as pd
 from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
+import time 
 
 # --- OCR fallback ---
 from ocr_extractor import extract_text_with_ocr
+
+# --- Google Sheets Imports for Name List ---
+try:
+    # אנו מייבאים את הפונקציות והמשתנים הדרושים מהקובץ הקיים
+    from google_sheets_updater import authenticate, MASTER_SHEET_URL
+    import gspread
+    GSPREAD_AVAILABLE = True
+except ImportError:
+    print("⚠️ Could not import Google Sheets modules. Name list will rely on local 'terms_dictionary.json' only.")
+    GSPREAD_AVAILABLE = False
+
 
 # =========================
 #  Config & OpenAI client
@@ -26,17 +38,68 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALL_RESULTS = []
 
-# --- Load Employee Names List Globally (as requested) ---
+# =========================
+#  NEW: Load Names from Master Sheet
+# =========================
+def _load_names_from_master_sheet() -> list:
+    """
+    Fetches the employee name list directly from the Master Google Sheet.
+    """
+    if not GSPREAD_AVAILABLE:
+        print("ℹ️ GSpread not available, skipping Master Sheet name load.")
+        return []
+
+    print("ℹ️ Fetching employee name list from Master Google Sheet...")
+    try:
+        client = authenticate()
+        if not client:
+            print("⚠️ Could not authenticate to Google Sheets to get name list.")
+            return []
+        
+        master_sheet = client.open_by_url(MASTER_SHEET_URL)
+        master_ws = master_sheet.get_worksheet(0) # First tab
+        
+        # Fetch all values from the first column (A) after the header
+        # [1:] to skip header row
+        names_list = master_ws.col_values(1)[1:] 
+        
+        # Clean list
+        cleaned_names = [name.strip() for name in names_list if name and name.strip()]
+        
+        if cleaned_names:
+            print(f"✅ Loaded {len(cleaned_names)} names from Master Sheet.")
+            return cleaned_names
+        else:
+            print("⚠️ Master Sheet name column is empty.")
+            return []
+    except Exception as e:
+        print(f"❌ Error loading names from Master Sheet: {repr(e)}")
+        return []
+
+# --- Load Employee Names List Globally (MODIFIED) ---
 EMPLOYEE_NAMES = []
+
+# 1. Try to load from local 'terms_dictionary.json' as a fallback
 try:
     with open("terms_dictionary.json", "r", encoding="utf-8") as f:
-        # Use .get() for safety, default to empty list if key missing
         EMPLOYEE_NAMES = json.load(f).get("employee_names", [])
         if DEBUG and EMPLOYEE_NAMES:
-            print(f"💡 Loaded {len(EMPLOYEE_NAMES)} names into backup list.")
+            print(f"💡 Loaded {len(EMPLOYEE_NAMES)} names from local 'terms_dictionary.json' (fallback).")
 except Exception as e:
-    print(f"⚠️ Could not load 'employee_names' from terms_dictionary.json: {e}")
-    EMPLOYEE_NAMES = []  # Ensure it's a list on failure
+    # This is not critical, just a fallback
+    pass
+
+# 2. Try to load from Google Master Sheet (will override local list)
+master_sheet_names = _load_names_from_master_sheet()
+
+if master_sheet_names:
+    # Combine and deduplicate, giving priority to master sheet names
+    EMPLOYEE_NAMES = list(dict.fromkeys(master_sheet_names + EMPLOYEE_NAMES))
+    if DEBUG:
+        print(f"💡 Final combined employee name list contains {len(EMPLOYEE_NAMES)} unique names.")
+elif not EMPLOYEE_NAMES:
+    print("⚠️ No employee names loaded from any source. Name matching fallback will be less accurate.")
+
 
 # =========================
 #  Known Hebrew Keywords Context
@@ -570,6 +633,11 @@ def parse_report(file_path: str) -> dict:
     Detect file type, extract text (with OCR fallback for PDFs), send to LLM,
     and return a dict aligned with main.py printing logic.
     """
+    
+    # --- *** START: DEBUG TIMING *** ---
+    t_start = time.time()
+    # --- *** END: DEBUG TIMING *** ---
+
     p = Path(file_path)
     file_name = p.name
 
@@ -610,6 +678,10 @@ def parse_report(file_path: str) -> dict:
             print(f"--- Skipping empty file: {file_name} ---")
             return result
 
+        # --- *** START: DEBUG TIMING *** ---
+        t_text_extracted = time.time()
+        # --- *** END: DEBUG TIMING *** ---
+
         # Normalize terms for numeric extraction
         normalized_text = normalize_terms(raw_text)
         numeric_hints = _preextract_numeric_summary(normalized_text)
@@ -629,6 +701,11 @@ def parse_report(file_path: str) -> dict:
             hints=numeric_hints,
             name_hint=name_hint_from_regex
         )
+        
+        # --- *** START: DEBUG TIMING *** ---
+        t_llm_done = time.time()
+        # --- *** END: DEBUG TIMING *** ---
+
         if not llm_data:
             return result  # Failed LLM analysis
 
@@ -668,6 +745,14 @@ def parse_report(file_path: str) -> dict:
         # The logic for exporting individual CSV/JSON files here has been removed.
 
         ALL_RESULTS.append(result)
+        
+        # --- *** START: DEBUG TIMING *** ---
+        t_end = time.time()
+        print(f"  DEBUG: Text extraction took: {t_text_extracted - t_start:.2f}s")
+        print(f"  DEBUG: LLM analysis took: {t_llm_done - t_text_extracted:.2f}s")
+        print(f"  DEBUG: Post-processing took: {t_end - t_llm_done:.2f}s")
+        print(f"  DEBUG: Total parse time: {t_end - t_start:.2f}s")
+        # --- *** END: DEBUG TIMING *** ---
 
         return result
     except Exception as e:

@@ -3,7 +3,7 @@ __pycache__/
 *.parsed.json
 Training_forms/
 zones_templates/
-*.env
+.env
 employee_registry.csv
 employee_registry.json
 terms_dictionary.json
