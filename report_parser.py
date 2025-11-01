@@ -223,6 +223,80 @@ def time_to_decimal(t: str) -> float | None:
     return round(decimal, 2)
 
 
+def _fix_rtl_name(name: str) -> str:
+    """
+    Simple RTL name fix - checks against employee list and returns reversed name if closer match.
+    Returns the name with characters in correct order.
+    Checks against employee list - if reversed version is closer match, returns that.
+    """
+    if not name or not isinstance(name, str):
+        return name
+    
+    # Only if name contains Hebrew characters
+    if not any('\u0590' <= c <= '\u05FF' for c in name):
+        return name
+    
+    # If employee list exists, check which version is closer
+    if EMPLOYEE_NAMES:
+        name_norm = name.strip()
+        name_reversed = name[::-1].strip()
+        
+        # Check with difflib - which version is closer to employee list
+        best_match_original = None
+        best_ratio_original = 0.0
+        best_match_reversed = None
+        best_ratio_reversed = 0.0
+        
+        for master_name in EMPLOYEE_NAMES:
+            master_norm = str(master_name).strip()
+            
+            # Check original version
+            ratio_orig = difflib.SequenceMatcher(None, name_norm.lower(), master_norm.lower()).ratio()
+            if ratio_orig > best_ratio_original:
+                best_ratio_original = ratio_orig
+                best_match_original = master_name
+            
+            # Check reversed version
+            ratio_rev = difflib.SequenceMatcher(None, name_reversed.lower(), master_norm.lower()).ratio()
+            if ratio_rev > best_ratio_reversed:
+                best_ratio_reversed = ratio_rev
+                best_match_reversed = master_name
+        
+        # If reversed version is closer (and difference is significant), use it
+        if best_ratio_reversed > best_ratio_original + 0.1:  # Difference of at least 0.1
+            return name_reversed
+    
+    # Without employee list or without significant difference - keep original name
+    return name
+
+
+def _apply_sanity_checks(report_summary: dict) -> dict:
+    """
+    Performs sanity checks on numeric data.
+    If total_presence_hours exceeds 350 (maximum hours per month), resets the value and moves it to sanity_failed_minutes.
+    """
+    if not report_summary or not isinstance(report_summary, dict):
+        return report_summary
+    
+    # Check total_presence_hours
+    total_hours = report_summary.get('total_presence_hours')
+    if total_hours is not None:
+        try:
+            hours_value = float(total_hours)
+            if hours_value > 350:  # More than 350 hours per month - not reasonable
+                # Move value to sanity_failed_minutes (in minutes)
+                minutes_value = int(hours_value * 60)
+                report_summary['sanity_failed_minutes'] = minutes_value
+                # Reset total_presence_hours
+                report_summary['total_presence_hours'] = None
+                if DEBUG:
+                    print(f"⚠️ Sanity check failed: total_presence_hours={hours_value} > 350, moved to sanity_failed_minutes={minutes_value}")
+        except (ValueError, TypeError):
+            pass  # Not a number - ignore
+    
+    return report_summary
+
+
 # =========================
 #  Pre-extract numeric summary
 # =========================
@@ -233,19 +307,45 @@ def _preextract_numeric_summary(text: str) -> dict:
     Returns dict with keys matching LLM expected keys.
     """
     keys_map = {
-        "תקן מחושב": "total_presence_hours",  # <-- Standard Hours
-        "סהכ שעות נוכחות": "total_approved_hours",  # <-- Gross Presence (normalized)
+        # שעות נוכחות
+        "תקן מחושב": "total_presence_hours",
+        "סהכ שעות נוכחות": "total_presence_hours",
+        "שעות בפועל": "total_presence_hours",
+        "נוכחות ברוטו": "total_presence_hours",
         "סהכ שעות": "total_presence_hours",
-        "סהכ שעות עבודה": "total_approved_hours",
-        "סהכ שעות לתשלום": "total_payable_hours",
+        "סהכ שעות עבודה": "total_presence_hours",
+        "סה\"כ שעות נוכחות": "total_presence_hours",
+        "סה\"כ שעות": "total_presence_hours",
+        
+        # שעות מאושרות
         "סהכ שעות מאושרות": "total_approved_hours",
-        "שעות לתשלום": "total_payable_hours",
         "שעות מאושרות": "total_approved_hours",
+        "סה\"כ שעות מאושרות": "total_approved_hours",
+        
+        # שעות לתשלום
+        "סהכ שעות לתשלום": "total_payable_hours",
+        "שעות לתשלום": "total_payable_hours",
+        "סה\"כ שעות לתשלום": "total_payable_hours",
+        "סהכ 125%": "total_payable_hours",
+        "סה\"כ 125%": "total_payable_hours",
+        
+        # שעות נוספות
         "שעות נוספות": "overtime_hours",
+        "סהכ נוספות": "overtime_hours",
+        "סה\"כ נוספות": "overtime_hours",
+        "125%": "overtime_hours",
+        "150%": "overtime_hours",
+        
+        # חופשה
         "חופשה": "vacation_days",
         "ימי חופשה": "vacation_days",
+        "חופש": "vacation_days",
+        
+        # מחלה
         "מחלה": "sick_days",
         "ימי מחלה": "sick_days",
+        
+        # חג
         "חג": "holiday_days",
         "ימי חג": "holiday_days",
     }
@@ -395,8 +495,12 @@ def _find_name_with_regex(text: str) -> str | None:
                     break
 
             if is_valid_name:
-                if DEBUG: print(f"✅ Regex selected valid name: '{name}'")
-                return name  # Return the first valid name found (primary success)
+                # Simple RTL fix - use _fix_rtl_name function
+                fixed_name = _fix_rtl_name(name)
+                if DEBUG and fixed_name != name:
+                    print(f"💡 Fixed RTL name: '{name}' -> '{fixed_name}'")
+                if DEBUG: print(f"✅ Regex selected valid name: '{fixed_name}'")
+                return fixed_name  # Return the first valid name found (primary success)
 
     # If all potential matches failed validation (or none found)
     if DEBUG: print(f"ℹ️ Regex failed validation or found no matches. Trying backup list...")
@@ -425,8 +529,12 @@ def _find_name_with_regex(text: str) -> str | None:
             matches = difflib.get_close_matches(cand, EMPLOYEE_NAMES, n=1, cutoff=0.8)
             if matches:
                 match = matches[0]
-                if DEBUG: print(f"✅ Found match from employee_names list (backup): {match}")
-                return match  # Return backup match
+                # Simple RTL fix - use _fix_rtl_name function
+                fixed_match = _fix_rtl_name(match)
+                if DEBUG and fixed_match != match:
+                    print(f"💡 Fixed RTL name: '{match}' -> '{fixed_match}'")
+                if DEBUG: print(f"✅ Found match from employee_names list (backup): {fixed_match}")
+                return fixed_match  # Return backup match
 
     # All methods failed
     print(f" :-( All name extraction methods (Regex + Backup List) failed.")
@@ -732,6 +840,9 @@ def parse_report(file_path: str) -> dict:
             if isinstance(v, (int, float)) or (isinstance(v, str) and v.replace('.', '', 1).isdigit()):
                 report_summary[k] = v
 
+        # --- Apply sanity checks ---
+        report_summary = _apply_sanity_checks(report_summary)
+
         result["report_summary"] = report_summary
 
         # --- Override LLM hour summary with pre-extracted hints if they exist ---
@@ -740,6 +851,9 @@ def parse_report(file_path: str) -> dict:
                 if result["report_summary"][key] is None or result["report_summary"][key] != numeric_hints[key]:
                     if DEBUG: print(f"💡 Overriding '{key}' with pre-extracted hint: {numeric_hints[key]}")
                     result["report_summary"][key] = numeric_hints[key]
+        
+        # --- Apply sanity checks again after override ---
+        result["report_summary"] = _apply_sanity_checks(result["report_summary"])
 
         # --- ייצוא CSV נפרד בוטל ---
         # The logic for exporting individual CSV/JSON files here has been removed.
