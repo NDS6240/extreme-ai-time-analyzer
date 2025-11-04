@@ -60,7 +60,7 @@ def get_best_name_match(employee_name: str, master_names: list) -> str:
         
         # Calculate similarity ratio using difflib
         ratio = difflib.SequenceMatcher(None, name_norm.lower(), master_norm.lower()).ratio()
-        if ratio > best_ratio and ratio >= 0.8:
+        if ratio > best_ratio and ratio >= 0.7:
             best_ratio = ratio
             best_match = master_name
     
@@ -74,7 +74,7 @@ def get_best_name_match(employee_name: str, master_names: list) -> str:
                 master_norm = ' '.join(master_norm.split())
                 
                 ratio = difflib.SequenceMatcher(None, name_reversed.lower(), master_norm.lower()).ratio()
-                if ratio > best_ratio and ratio >= 0.8:
+                if ratio > best_ratio and ratio >= 0.7:
                     best_ratio = ratio
                     best_match = master_name
     

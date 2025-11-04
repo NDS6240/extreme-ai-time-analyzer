@@ -7,3 +7,7 @@ openai==1.50.2          # AI-based report parsing and analysis
 python-dotenv==1.0.1    # Environment variable management (.env)
 gspread==5.12.4
 google-auth==2.29.0
+
+# --- ML Gatekeeper Dependencies ---
+scikit-learn==1.5.0     # For the classifier model
+joblib==1.4.2           # For saving/loading the model pipeline

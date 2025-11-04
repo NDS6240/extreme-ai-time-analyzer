@@ -10,6 +10,7 @@ from google.oauth2.service_account import Credentials
 from gspread.exceptions import WorksheetNotFound
 import re
 import difflib
+from datetime import datetime
 from data_validator import (
     load_master_data, 
     get_master_employee_dict, 
@@ -80,7 +81,7 @@ def get_best_name_match(employee_name: str, master_names: list) -> str:
         
         # Calculate similarity ratio using difflib
         ratio = difflib.SequenceMatcher(None, name_norm.lower(), master_norm.lower()).ratio()
-        if ratio > best_ratio and ratio >= 0.8:
+        if ratio > best_ratio and ratio >= 0.7:
             best_ratio = ratio
             best_match = master_name
     
@@ -94,7 +95,7 @@ def get_best_name_match(employee_name: str, master_names: list) -> str:
                 master_norm = ' '.join(master_norm.split())
                 
                 ratio = difflib.SequenceMatcher(None, name_reversed.lower(), master_norm.lower()).ratio()
-                if ratio > best_ratio and ratio >= 0.8:
+                if ratio > best_ratio and ratio >= 0.7:
                     best_ratio = ratio
                     best_match = master_name
     
@@ -226,6 +227,57 @@ def col_to_letter(col_index):
     return letter
 
 
+def _parse_period_to_date(period_name: str):
+    """
+    Parse a period name like "October 2025" or "יוני 2023" into a datetime(year, month, 1).
+    Returns None if parsing fails.
+    """
+    if not period_name:
+        return None
+    try:
+        text = str(period_name).strip()
+        text = re.sub(r'["\']', '', text)
+
+        eng_months = {
+            'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
+            'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12
+        }
+        heb_months = {
+            'ינואר': 1, 'פברואר': 2, 'מרץ': 3, 'אפריל': 4, 'מאי': 5, 'יוני': 6,
+            'יולי': 7, 'אוגוסט': 8, 'ספטמבר': 9, 'אוקטובר': 10, 'נובמבר': 11, 'דצמבר': 12
+        }
+
+        # Try English "Month YYYY"
+        m = re.match(r'^([A-Za-z]+)\s+(\d{4})$', text)
+        if m:
+            month_name = m.group(1).lower()
+            year = int(m.group(2))
+            month = eng_months.get(month_name)
+            if month:
+                return datetime(year, month, 1)
+
+        # Try Hebrew "<month> <year>"
+        m2 = re.match(r'^([\u0590-\u05FF"\'-]+)\s+(\d{4})$', text)
+        if m2:
+            month_name_he = m2.group(1).replace('"', '').replace("'", '').strip()
+            year = int(m2.group(2))
+            month = heb_months.get(month_name_he)
+            if month:
+                return datetime(year, month, 1)
+
+        # Fallback: try only year-month numeric like 2025-10 or 10/2025
+        m3 = re.match(r'^(\d{4})[-/](\d{1,2})$', text)
+        if m3:
+            year = int(m3.group(1))
+            month = int(m3.group(2))
+            if 1 <= month <= 12:
+                return datetime(year, month, 1)
+
+    except Exception:
+        return None
+    return None
+
+
 def update_google_sheets(all_results, employee_names=None):
     """
     Main function: uploads processed results to Google Sheets.
@@ -242,30 +294,23 @@ def update_google_sheets(all_results, employee_names=None):
     if not client:
         return
 
-    # 1. Deduplicate results
-    print("   - Performing deduplication...")
-    clean_results = deduplicate_results(all_results, employee_names)
-    
-    if not clean_results:
-        print("⚠️ No data to update in Google Sheets (list is empty after cleaning).")
+    # Group results by period name first
+    results_by_period = {}
+    for res in (all_results or []):
+        period = res.get('report_period')
+        if not period:
+            continue
+        period = re.sub(r'[\"\',]', '', str(period)).strip()
+        if not period:
+            continue
+        results_by_period.setdefault(period, []).append(res)
+
+    if not results_by_period:
+        print("⚠️ No report periods found in results. Nothing to update.")
         return
 
-    # Determine report period (remains the same)
-    report_period = None
-    for res in clean_results:
-        report_period = res.get('report_period')
-        if report_period:
-            break
-
-    if not report_period:
-        print("⚠️ Cannot determine report period from results. Stopping.")
-        return
-    report_period = re.sub(r'[\"\',]', '', str(report_period)).strip()
-    if not report_period:
-        print("⚠️ Report period name is invalid after cleaning. Stopping.")
-        return
-
-    print(f"   - Report period identified: {report_period}")
+    # Current date for locking logic
+    current_date = datetime.now()
 
     try:
         # 2. Open Sheets
@@ -290,226 +335,237 @@ def update_google_sheets(all_results, employee_names=None):
             print("   - Ensure the master sheet is set up with columns in the first tab.")
             return
 
-        # Step 4: Check/Create monthly tab for the report period
-        try:
-            monthly_ws = data_sheet.worksheet(report_period)
-            print(f"   - Sheet '{report_period}' exists. Updating data...")
-        except WorksheetNotFound:
-            print(f"   - Sheet '{report_period}' not found. Creating new sheet...")
-            monthly_ws = data_sheet.add_worksheet(title=report_period, rows=100, cols=30)
+        # Iterate over each period and process independently with locking
+        for report_period, period_results in results_by_period.items():
+            # Locking: skip periods older than 2 months
+            period_clean = re.sub(r'[\"\',]', '', str(report_period)).strip()
+            period_date = _parse_period_to_date(period_clean)
+            if period_date is not None:
+                month_diff = (current_date.year - period_date.year) * 12 + (current_date.month - period_date.month)
+                if month_diff >= 2:
+                    print(f"   - 🔒 Skipping update for locked period: {period_clean}")
+                    continue
 
-            # Create headers in the new sheet
-            data_headers = master_headers + [
-                TARGET_COLUMN_TITLE,  # Actual hours column
-                CALCULATED_COLUMN_TITLE,  # Calculated percentage column
-                'file',  # For debugging
-                'employee_id'  # For debugging
-            ]
-            
-            monthly_ws.append_row(data_headers)
+            print(f"   - Processing active period: {period_clean}")
 
-            # Copy employee list from master
-            if master_employees_rows:
-                monthly_ws.append_rows(master_employees_rows)
-            print(f"   - Sheet '{report_period}' created with {len(master_employees_rows)} employees.")
-            
-            # Add percentage formula to newly created sheet
-            current_headers = monthly_ws.get_all_values()[0]
-            current_col_map = {header.strip(): i + 1 for i, header in enumerate(current_headers)}
-            
-            # Assuming 'תקן שעות' (Standard Hours) is the 3rd column (index 2) in the master sheet
-            standard_hours_col_index = 3 
-            standard_hours_header = master_headers[standard_hours_col_index - 1].strip()
-            
-            actual_hours_col = current_col_map.get(TARGET_COLUMN_TITLE)
-            standard_hours_col = current_col_map.get(standard_hours_header)
-            calculated_col = current_col_map.get(CALCULATED_COLUMN_TITLE)
-            
-            if actual_hours_col and standard_hours_col and calculated_col:
-                # Convert column index to A1 notation
-                actual_letter = col_to_letter(actual_hours_col)
-                standard_letter = col_to_letter(standard_hours_col)
+            # Deduplicate only the current period results
+            clean_results = deduplicate_results(period_results, employee_names)
+            if not clean_results:
+                print(f"   - ⚠️ No data to update for period '{period_clean}' after cleaning.")
+                continue
+
+            # Step 4: Check/Create monthly tab for this period
+            try:
+                monthly_ws = data_sheet.worksheet(period_clean)
+                print(f"   - Sheet '{period_clean}' exists. Updating data...")
+            except WorksheetNotFound:
+                print(f"   - Sheet '{period_clean}' not found. Creating new sheet...")
+                monthly_ws = data_sheet.add_worksheet(title=period_clean, rows=100, cols=30)
+
+                # Create headers in the new sheet
+                data_headers = master_headers + [
+                    TARGET_COLUMN_TITLE,  # Actual hours column
+                    CALCULATED_COLUMN_TITLE,  # Calculated percentage column
+                    'file',  # For debugging
+                    'employee_id'  # For debugging
+                ]
                 
-                num_employees = len(master_employees_rows)
+                monthly_ws.append_row(data_headers)
+
+                # Copy employee list from master
+                if master_employees_rows:
+                    monthly_ws.append_rows(master_employees_rows)
+                print(f"   - Sheet '{period_clean}' created with {len(master_employees_rows)} employees.")
                 
-                if num_employees > 0:
-                    formulas_to_send = []
+                # Add percentage formula to newly created sheet
+                current_headers = monthly_ws.get_all_values()[0]
+                current_col_map = {header.strip(): i + 1 for i, header in enumerate(current_headers)}
+                
+                # Assuming 'תקן שעות' (Standard Hours) is the 3rd column (index 2) in the master sheet
+                standard_hours_col_index = 3 
+                standard_hours_header = master_headers[standard_hours_col_index - 1].strip()
+                
+                actual_hours_col = current_col_map.get(TARGET_COLUMN_TITLE)
+                standard_hours_col = current_col_map.get(standard_hours_header)
+                calculated_col = current_col_map.get(CALCULATED_COLUMN_TITLE)
+                
+                if actual_hours_col and standard_hours_col and calculated_col:
+                    # Convert column index to A1 notation
+                    actual_letter = col_to_letter(actual_hours_col)
+                    standard_letter = col_to_letter(standard_hours_col)
                     
-                    # Start from row 2 (after header)
-                    for row_index in range(2, num_employees + 2):
-                        # Formula: IFERROR(Actual Hours / Standard Hours, "")
-                        formula = f'=IFERROR({actual_letter}{row_index}/{standard_letter}{row_index}, "")'
-                        formulas_to_send.append(gspread.Cell(row_index, calculated_col, formula))
-
-                    monthly_ws.update_cells(formulas_to_send, value_input_option='USER_ENTERED')
-                    print(f"   - Added percentage formula to {num_employees} rows.")
+                    num_employees = len(master_employees_rows)
                     
-        # Step 5: Map data for update with enhanced matching
-        print("   - Mapping updated data...")
+                    if num_employees > 0:
+                        formulas_to_send = []
+                        
+                        # Start from row 2 (after header)
+                        for row_index in range(2, num_employees + 2):
+                            # Formula: IFERROR(Actual Hours / Standard Hours, "")
+                            formula = f'=IFERROR({actual_letter}{row_index}/{standard_letter}{row_index}, "")'
+                            formulas_to_send.append(gspread.Cell(row_index, calculated_col, formula))
 
-        all_data = monthly_ws.get_all_values()
-        if not all_data:
-            print("❌ Monthly sheet is empty and was not created correctly. Stopping.")
-            return
-
-        headers = all_data[0]
-        col_map = {header.strip(): i + 1 for i, header in enumerate(headers)}  # +1 for gspread
-        master_name_col_header = master_headers[0] # e.g., "שם עובד"
-        
-        # --- Critical check for required columns ---
-        if master_name_col_header not in col_map:
-            print(f"❌ Cannot find name column '{master_name_col_header}' in data sheet. Check setup.")
-            return
-        if TARGET_COLUMN_TITLE not in col_map:
-            print(f"❌ Cannot find target column '{TARGET_COLUMN_TITLE}' in data sheet. Check setup.")
-            return
-
-        # Load master employee data for better matching
-        load_master_data()
-        master_dict = get_master_employee_dict()
-        master_names_from_json = list(master_dict.keys()) if master_dict else []
-        
-        # Build enhanced row map (employee_name -> row_number) with multiple variants
-        # Maps both normalized names and original names for flexible matching
-        row_map = {}
-        row_map_variants = {}  # For fuzzy matching: normalized_name_lower -> (original_name, row_number)
-        
-        for i, row in enumerate(all_data[1:], start=2):  # +1 for header skip, start=2 for gspread
-            if len(row) > (col_map[master_name_col_header] - 1):
-                employee_name = row[col_map[master_name_col_header] - 1].strip()
-                if employee_name:
-                    # Store exact name
-                    if employee_name not in row_map:
-                        row_map[employee_name] = i
+                        monthly_ws.update_cells(formulas_to_send, value_input_option='USER_ENTERED')
+                        print(f"   - Added percentage formula to {num_employees} rows.")
                     
-                    # Store normalized variants
-                    name_norm = normalize_name(employee_name)
-                    if name_norm:
-                        name_norm_lower = name_norm.lower()
-                        if name_norm_lower not in row_map_variants:
-                            row_map_variants[name_norm_lower] = (employee_name, i)
-                        # Also store with different normalizations
-                        name_alt = re.sub(r'[-"\']', ' ', employee_name).strip().lower()
-                        if name_alt and name_alt != name_norm_lower:
-                            if name_alt not in row_map_variants:
-                                row_map_variants[name_alt] = (employee_name, i)
+            # Step 5: Map data for update with enhanced matching for this period
+            print("   - Mapping updated data...")
 
-        print(f"   - Built row map with {len(row_map)} exact matches and {len(row_map_variants)} normalized variants")
-        
-        updates_to_send = []
-        unmatched_count = 0
-        matched_count = 0
-
-        for result in clean_results:
-            name = result.get('employee_name')
-            if not name:
+            all_data = monthly_ws.get_all_values()
+            if not all_data:
+                print(f"❌ Monthly sheet '{period_clean}' is empty and was not created correctly. Skipping.")
                 continue
             
-            # Remove CHECK prefix if exists for matching
-            original_name = name
-            if name.startswith('**CHECK:'):
-                name = name.replace('**CHECK:', '').strip()
+            headers = all_data[0]
+            col_map = {header.strip(): i + 1 for i, header in enumerate(headers)}  # +1 for gspread
+            master_name_col_header = master_headers[0] # e.g., "שם עובד"
+            
+            # --- Critical check for required columns ---
+            if master_name_col_header not in col_map:
+                print(f"❌ Cannot find name column '{master_name_col_header}' in data sheet. Check setup.")
+                continue
+            if TARGET_COLUMN_TITLE not in col_map:
+                print(f"❌ Cannot find target column '{TARGET_COLUMN_TITLE}' in data sheet. Check setup.")
+                continue
+            
+            # Load master employee data for better matching
+            load_master_data()
+            master_dict = get_master_employee_dict()
+            master_names_from_json = list(master_dict.keys()) if master_dict else []
+            
+            # Build enhanced row map (employee_name -> row_number) with multiple variants
+            # Maps both normalized names and original names for flexible matching
+            row_map = {}
+            row_map_variants = {}  # For fuzzy matching: normalized_name_lower -> (original_name, row_number)
+            
+            for i, row in enumerate(all_data[1:], start=2):  # +1 for header skip, start=2 for gspread
+                if len(row) > (col_map[master_name_col_header] - 1):
+                    employee_name = row[col_map[master_name_col_header] - 1].strip()
+                    if employee_name:
+                        # Store exact name
+                        if employee_name not in row_map:
+                            row_map[employee_name] = i
+                        
+                        # Store normalized variants
+                        name_norm = normalize_name(employee_name)
+                        if name_norm:
+                            name_norm_lower = name_norm.lower()
+                            if name_norm_lower not in row_map_variants:
+                                row_map_variants[name_norm_lower] = (employee_name, i)
+                            # Also store with different normalizations
+                            name_alt = re.sub(r'[-"\']', ' ', employee_name).strip().lower()
+                            if name_alt and name_alt != name_norm_lower:
+                                if name_alt not in row_map_variants:
+                                    row_map_variants[name_alt] = (employee_name, i)
+            
+            print(f"   - Built row map with {len(row_map)} exact matches and {len(row_map_variants)} normalized variants")
+            
+            updates_to_send = []
+            unmatched_count = 0
+            matched_count = 0
+            
+            for result in clean_results:
+                name = result.get('employee_name')
+                if not name:
+                    continue
+                
+                # Remove CHECK prefix if exists for matching
+                if name.startswith('**CHECK:'):
+                    name = name.replace('**CHECK:', '').strip()
 
-            row_num = None
-            matched_master_name = None
-            
-            # Strategy 1: Try exact match first
-            name_norm = normalize_name(name)
-            if name_norm:
-                name_norm_lower = name_norm.lower()
-                if name_norm_lower in row_map_variants:
-                    matched_name_in_sheet, row_num = row_map_variants[name_norm_lower]
-                    matched_master_name = matched_name_in_sheet
-                    matched_count += 1
-                    print(f"   ✅ Exact match: '{name}' -> '{matched_name_in_sheet}' (row {row_num})")
-            
-            # Strategy 2: Try matching with master_employee.json (best source)
-            if not row_num and master_names_from_json:
-                matched_name, match_ratio = match_employee_name(name, master_names_from_json, threshold=0.75)
-                if matched_name and match_ratio >= 0.75:
-                    matched_master_name = matched_name
-                    # Now try to find this matched name in the sheet
-                    matched_norm = normalize_name(matched_name).lower()
-                    if matched_norm in row_map_variants:
-                        _, row_num = row_map_variants[matched_norm]
-                        matched_count += 1
-                        print(f"   ✅ Master JSON match: '{name}' -> '{matched_name}' (row {row_num}, ratio: {match_ratio:.2%})")
-            
-            # Strategy 3: Try matching with master_employee_names from Google Sheet
-            if not row_num and master_employee_names:
-                matched_name, match_ratio = match_employee_name(name, master_employee_names, threshold=0.75)
-                if matched_name and match_ratio >= 0.75:
-                    matched_master_name = matched_name
-                    # Try to find in sheet
-                    matched_norm = normalize_name(matched_name).lower()
-                    if matched_norm in row_map_variants:
-                        _, row_num = row_map_variants[matched_norm]
-                        matched_count += 1
-                        print(f"   ✅ Master Sheet match: '{name}' -> '{matched_name}' (row {row_num}, ratio: {match_ratio:.2%})")
-            
-            # Strategy 4: Fuzzy match against all names in row_map_variants
-            if not row_num:
-                best_match_in_sheet = None
-                best_ratio = 0.0
-                name_norm_lower = normalize_name(name).lower()
+                row_num = None
                 
-                for sheet_name_norm_lower, (sheet_name_original, sheet_row_num) in row_map_variants.items():
-                    ratio = difflib.SequenceMatcher(None, name_norm_lower, sheet_name_norm_lower).ratio()
-                    if ratio > best_ratio and ratio >= 0.75:
-                        best_ratio = ratio
-                        best_match_in_sheet = sheet_name_original
-                        row_num = sheet_row_num
+                # Strategy 1: Try exact match first
+                name_norm = normalize_name(name)
+                if name_norm:
+                    name_norm_lower = name_norm.lower()
+                    if name_norm_lower in row_map_variants:
+                        matched_name_in_sheet, row_num = row_map_variants[name_norm_lower]
+                        matched_count += 1
+                        print(f"   ✅ Exact match: '{name}' -> '{matched_name_in_sheet}' (row {row_num})")
                 
+                # Strategy 2: Try matching with master_employee.json (best source)
+                if not row_num and master_names_from_json:
+                    matched_name, match_ratio = match_employee_name(name, master_names_from_json, threshold=0.75)
+                    if matched_name and match_ratio >= 0.75:
+                        matched_norm = normalize_name(matched_name).lower()
+                        if matched_norm in row_map_variants:
+                            _, row_num = row_map_variants[matched_norm]
+                            matched_count += 1
+                            print(f"   ✅ Master JSON match: '{name}' -> '{matched_name}' (row {row_num}, ratio: {match_ratio:.2%})")
+                
+                # Strategy 3: Try matching with master_employee_names from Google Sheet
+                if not row_num and master_employee_names:
+                    matched_name, match_ratio = match_employee_name(name, master_employee_names, threshold=0.75)
+                    if matched_name and match_ratio >= 0.75:
+                        matched_norm = normalize_name(matched_name).lower()
+                        if matched_norm in row_map_variants:
+                            _, row_num = row_map_variants[matched_norm]
+                            matched_count += 1
+                            print(f"   ✅ Master Sheet match: '{name}' -> '{matched_name}' (row {row_num}, ratio: {match_ratio:.2%})")
+                
+                # Strategy 4: Fuzzy match against all names in row_map_variants
+                if not row_num:
+                    best_match_in_sheet = None
+                    best_ratio = 0.0
+                    name_norm_lower = normalize_name(name).lower()
+                    
+                    for sheet_name_norm_lower, (sheet_name_original, sheet_row_num) in row_map_variants.items():
+                        ratio = difflib.SequenceMatcher(None, name_norm_lower, sheet_name_norm_lower).ratio()
+                        if ratio > best_ratio and ratio >= 0.75:
+                            best_ratio = ratio
+                            best_match_in_sheet = sheet_name_original
+                            row_num = sheet_row_num
+                    
+                    if row_num:
+                        matched_count += 1
+                        print(f"   ✅ Fuzzy match: '{name}' -> '{best_match_in_sheet}' (row {row_num}, ratio: {best_ratio:.2%})")
+                
+                # If still no match, add new row or skip
+                if not row_num:
+                    unmatched_count += 1
+                    # Check if name exists in master list (to avoid false positives)
+                    is_in_master = False
+                    if master_names_from_json:
+                        matched_name, match_ratio = match_employee_name(name, master_names_from_json, threshold=0.5)
+                        if matched_name and match_ratio >= 0.5:
+                            is_in_master = True
+                    
+                    name_norm_for_check = normalize_name(name).lower()
+                    is_in_sheet_master = name_norm_for_check in [normalize_name(n).lower() for n in master_employee_names]
+                    
+                    if is_in_master or is_in_sheet_master:
+                        print(f"   - ⚠️ Warning: Employee '{name}' exists in master but not found in sheet. Skipping.")
+                    else:
+                        print(f"   - ℹ️ New employee '{name}' not found anywhere, adding to sheet.")
+                        new_row_data = ["" for _ in headers]
+                        new_row_data[col_map[master_name_col_header] - 1] = name.strip()
+                        monthly_ws.append_row(new_row_data)
+                        row_num = len(all_data) + 1
+                        all_data.append(new_row_data)
+                        # Update maps
+                        row_map[name] = row_num
+                        if name_norm_for_check:
+                            row_map_variants[name_norm_for_check] = (name, row_num)
+                
+                # Update actual hours column
                 if row_num:
-                    matched_master_name = best_match_in_sheet
-                    matched_count += 1
-                    print(f"   ✅ Fuzzy match: '{name}' -> '{best_match_in_sheet}' (row {row_num}, ratio: {best_ratio:.2%})")
-            
-            # If still no match, add new row or skip
-            if not row_num:
-                unmatched_count += 1
-                # Check if name exists in master list (to avoid false positives)
-                is_in_master = False
-                if master_names_from_json:
-                    matched_name, match_ratio = match_employee_name(name, master_names_from_json, threshold=0.5)
-                    if matched_name and match_ratio >= 0.5:
-                        is_in_master = True
-                
-                name_norm_for_check = normalize_name(name).lower()
-                is_in_sheet_master = name_norm_for_check in [normalize_name(n).lower() for n in master_employee_names]
-                
-                if is_in_master or is_in_sheet_master:
-                    print(f"   - ⚠️ Warning: Employee '{name}' exists in master but not found in sheet. Skipping.")
-                else:
-                    print(f"   - ℹ️ New employee '{name}' not found anywhere, adding to sheet.")
-                    new_row_data = ["" for _ in headers]
-                    new_row_data[col_map[master_name_col_header] - 1] = name.strip()
-                    monthly_ws.append_row(new_row_data)
-                    row_num = len(all_data) + 1
-                    all_data.append(new_row_data)
-                    # Update maps
-                    row_map[name] = row_num
-                    if name_norm_for_check:
-                        row_map_variants[name_norm_for_check] = (name, row_num)
-
-            # Update actual hours column
-            if row_num:
-                summary = result.get('report_summary', {})
-                hours_val = summary.get('total_presence_hours')
-                
-                if hours_val is not None:
-                    col = col_map[TARGET_COLUMN_TITLE]
-                    updates_to_send.append(gspread.Cell(row_num, col, str(hours_val)))
-                
-        # Send all updates in one batch
-        if updates_to_send:
-            monthly_ws.update_cells(updates_to_send, value_input_option='USER_ENTERED')
-            print(f"✅ Google Sheets update complete!")
-            print(f"   - {matched_count} employees matched and updated")
-            print(f"   - {unmatched_count} employees could not be matched")
-            print(f"   - {len(updates_to_send)} cells updated total")
-        else:
-            print("✅ Google Sheets is already up to date. No changes.")
+                    summary = result.get('report_summary', {})
+                    hours_val = summary.get('total_presence_hours')
+                    
+                    if hours_val is not None:
+                        col = col_map[TARGET_COLUMN_TITLE]
+                        updates_to_send.append(gspread.Cell(row_num, col, str(hours_val)))
+                    
+            # Send all updates for this period in one batch
+            if updates_to_send:
+                monthly_ws.update_cells(updates_to_send, value_input_option='USER_ENTERED')
+                print(f"✅ Google Sheets update complete for '{period_clean}'!")
+                print(f"   - {matched_count} employees matched and updated")
+                print(f"   - {unmatched_count} employees could not be matched")
+                print(f"   - {len(updates_to_send)} cells updated total")
+            else:
+                print(f"✅ Google Sheets is already up to date for '{period_clean}'. No changes.")
 
     except Exception as e:
         print(f"❌ General error during Google Sheets update: {repr(e)}")

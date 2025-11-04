@@ -85,7 +85,7 @@ def fix_rtl_name(name: str) -> str:
 
 
 def match_employee_name(employee_name: str, master_names: Optional[List[str]] = None, 
-                        threshold: float = 0.8) -> Tuple[Optional[str], float]:
+                        threshold: float = 0.7) -> Tuple[Optional[str], float]:
     """
     Match employee name to master list using fuzzy matching.
     Returns (matched_name, match_ratio) or (None, 0.0) if no match found.
@@ -210,6 +210,10 @@ def validate_and_unify_data(all_results: List[Dict], log_unmatched: bool = True)
             log_message(f"Report {idx}: No employee name found")
             continue
         
+        report_summary = result.get("report_summary") or {}
+        if not isinstance(report_summary, dict):
+            report_summary = {}
+        
         # Match employee name to master
         matched_name, match_ratio = match_employee_name(employee_name, master_names)
         
@@ -244,7 +248,6 @@ def validate_and_unify_data(all_results: List[Dict], log_unmatched: bool = True)
             seen_names.add(norm_name)
             
             # Get reported hours (prefer total_presence_hours, fallback to total_approved_hours)
-            report_summary = result.get("report_summary", {})
             reported_hours = report_summary.get("total_presence_hours") or report_summary.get("total_approved_hours")
             
             # Validate hours
@@ -383,3 +386,68 @@ def export_summary_table(df: pd.DataFrame, output_dir: str = "downloads/reports_
         log_message(f"❌ Error exporting summary table: {repr(e)}")
         raise
 
+
+def apply_vacation_completion(all_results: List[Dict], master_dict: Dict) -> List[Dict]:
+    """
+    Ensure under-reported presence hours are supplemented by available vacation days.
+    """
+    HOURS_PER_VACATION_DAY = 8.6
+
+    if not all_results or not isinstance(all_results, list):
+        return all_results
+
+    master_dict = master_dict or {}
+    master_names = list(master_dict.keys())
+
+    for result in all_results:
+        if not isinstance(result, dict):
+            continue
+
+        report_summary = result.get("report_summary")
+        if not isinstance(report_summary, dict):
+            continue
+
+        employee_name = result.get("employee_name")
+        if not employee_name:
+            continue
+
+        matched_name, _ = match_employee_name(employee_name, master_names) if master_names else (None, 0.0)
+        if matched_name:
+            standard_hours = master_dict.get(matched_name, {}).get("standard_hours")
+        else:
+            standard_hours = None
+
+        if not standard_hours or standard_hours <= 0:
+            continue
+
+        reported_hours = report_summary.get("total_presence_hours")
+        vacation_days = report_summary.get("vacation_days")
+
+        if (
+            reported_hours is None
+            or vacation_days is None
+            or reported_hours >= standard_hours
+            or vacation_days <= 0
+        ):
+            continue
+
+        hours_needed = standard_hours - reported_hours
+        vacation_hours_available = vacation_days * HOURS_PER_VACATION_DAY
+        hours_to_use = min(hours_needed, vacation_hours_available)
+
+        if hours_to_use <= 0:
+            continue
+
+        new_reported_hours = reported_hours + hours_to_use
+        new_vacation_days = (vacation_hours_available - hours_to_use) / HOURS_PER_VACATION_DAY
+
+        report_summary["original_presence_hours"] = reported_hours
+        report_summary["auto_completed_hours"] = round(hours_to_use, 2)
+        report_summary["total_presence_hours"] = round(new_reported_hours, 2)
+        report_summary["vacation_days"] = round(new_vacation_days, 2)
+
+        log_message(
+            f"🔄 Vacation completion applied for '{employee_name}' — added {hours_to_use:.2f} hours, remaining vacation days: {new_vacation_days:.2f}"
+        )
+
+    return all_results

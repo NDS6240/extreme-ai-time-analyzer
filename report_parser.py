@@ -760,7 +760,7 @@ def parse_report(file_path: str) -> dict:
     try:
         # 1) Extract raw text
         suffix = p.suffix.lower().strip()
-        supported_types = [".pdf", ".xlsx", ".xls", ".xlsm", ".csv"]
+        supported_types = [".pdf", ".xlsx", ".xls", ".xlsm", ".csv", ".txt"]
         if suffix not in supported_types:
             print(f"--- Skipping unsupported file type: {file_name} ---")
             return result
@@ -771,6 +771,14 @@ def parse_report(file_path: str) -> dict:
                 if _looks_unreadable(raw_text) or not raw_text.strip():
                     print(f"⚠️ {file_name}: PDF unreadable or empty — forcing OCR.")
                     raw_text = extract_text_with_ocr(file_path)
+            elif suffix == ".txt":
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        raw_text = f.read()
+                    print(f"ℹ️ {file_name}: Reading as plain text file.")
+                except Exception as e:
+                    print(f"⚠️ {file_name}: Error reading .txt file — {e}")
+                    raw_text = ""
             else:
                 raw_text = _extract_text_from_excel_or_csv(file_path)
         except Exception as e:

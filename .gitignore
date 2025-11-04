@@ -12,3 +12,5 @@ master_employee.json
 credentials.json
 downloads/
 tokens/
+classifier_pipeline.pkl
+training_data.csv
