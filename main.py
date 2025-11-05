@@ -44,6 +44,9 @@ def get_raw_text_for_model(file_path: Path) -> str:
 
 
 if __name__ == "__main__":
+    
+    DEBUG_ISSUES = [] # רשימה לאיסוף בעיות
+
     # Step 1: Fetch new reports from Gmail
     print("📩 Fetching new reports from Gmail...")
     fetch_reports_from_gmail()
@@ -80,8 +83,15 @@ if __name__ == "__main__":
             # Pre-filter files
             files_to_process = []
             for f in all_files_in_dir:
+                # --- שונה: דילוג על קבצי מטא-דאטה ---
+                if ".meta.json" in f.name:
+                    continue
+                # --- סוף קטע שונה ---
+
                 if "_parsed" in f.name or f.name.startswith(".") or f.suffix.lower() not in supported_extensions:
                     print(f"--- Skipping generated or unsupported file: {f.name} ---")
+                    if f.suffix.lower() not in supported_extensions and not f.name.startswith("."):
+                         DEBUG_ISSUES.append({"file": f.name, "employee_name": "N/A", "issue": "Unsupported file type"})
                     continue
                 files_to_process.append(f)
             
@@ -93,12 +103,26 @@ if __name__ == "__main__":
                 # Process each report file
                 for i, f in enumerate(files_to_process, start=1):
                     print(f"\n--- Analyzing Report {i}/{total_count}: {f.name} ---")
+                    
+                    # --- חדש: טעינת קובץ מטא-דאטה ---
+                    meta_path = f.with_suffix(f.suffix + '.meta.json')
+                    email_metadata = None
+                    if meta_path.exists():
+                        try:
+                            with open(meta_path, 'r', encoding='utf-8') as meta_f:
+                                email_metadata = json.load(meta_f)
+                            print(f"  ℹ️ Loaded email metadata (Subject: {email_metadata.get('subject')})")
+                        except Exception as e:
+                            print(f"  ⚠️ Could not read metadata file {meta_path.name}: {e}")
+                    # --- סוף קטע חדש ---
+
 
                     # --- ML GATEKEEPER LOGIC ---
                     if model:
                         raw_text = get_raw_text_for_model(f)
                         if not raw_text:
                             print(f"  --- Skipping: Could not extract text for ML check. ---")
+                            DEBUG_ISSUES.append({"file": f.name, "employee_name": "N/A", "issue": "Failed to extract text"}) 
                             continue
                         
                         try:
@@ -107,10 +131,15 @@ if __name__ == "__main__":
                             
                             if prediction == 0:
                                 print(f"  --- 🛑 Skipping (ML Gatekeeper): File identified as 'Junk'. ---")
+                                DEBUG_ISSUES.append({"file": f.name, "employee_name": "N/A", "issue": "Skipped - ML 'Junk'"}) 
                                 
                                 # Delete the junk file immediately
                                 try:
                                     os.remove(f)
+                                    # --- חדש: מחיקת מטא-דאטה ---
+                                    if meta_path.exists():
+                                        os.remove(meta_path)
+                                    # --- סוף קטע חדש ---
                                     if os.getenv("DEBUG", "False").lower() == "true":
                                         print(f"  🗑️ Removed junk file: {f.name}")
                                 except OSError as e:
@@ -123,10 +152,14 @@ if __name__ == "__main__":
                         except Exception as e:
                             # If model fails, proceed to OpenAI as a fallback
                             print(f"  --- ⚠️ ML Gatekeeper failed ({e}). Proceeding to OpenAI anyway. ---")
+                            DEBUG_ISSUES.append({"file": f.name, "employee_name": "N/A", "issue": f"ML Gatekeeper Error: {e}"})
                     # --- END ML GATEKEEPER LOGIC ---
                     
-                    # Parse the report using LLM-based extraction (ONLY IF IT PASSED THE GATE)
-                    result = parse_report(str(f))
+                    # --- שונה: העברת מטא-דאטה לפארסר ---
+                    result = parse_report(str(f), email_metadata=email_metadata)
+
+                    if not result.get('employee_name') and (not result.get('report_summary') or not result['report_summary']):
+                         DEBUG_ISSUES.append({"file": result['file'], "employee_name": "N/A", "issue": "Failed to parse (No data extracted by AI)"})
 
                     # Display extracted information
                     print(f"  File: {result['file']}")
@@ -140,6 +173,10 @@ if __name__ == "__main__":
                     if f.exists():
                         try:
                             os.remove(f)
+                            # --- חדש: מחיקת מטא-דאטה ---
+                            if meta_path.exists():
+                                os.remove(meta_path)
+                            # --- סוף קטע חדש ---
                             if os.getenv("DEBUG", "False").lower() == "true":
                                 print(f"  🗑️ Removed local file: {f.name}")
                         except OSError as e:
@@ -152,7 +189,7 @@ if __name__ == "__main__":
     processed_results = apply_vacation_completion(ALL_RESULTS, master_dict)
 
     # Step 3: Export validated data to Excel with summary table
-    export_summary_excel(processed_results, EMPLOYEE_NAMES)
+    export_summary_excel(processed_results, EMPLOYEE_NAMES, debug_issues=DEBUG_ISSUES)
     
     # Step 4: Update Google Sheets with validated and matched data
     update_google_sheets(processed_results, EMPLOYEE_NAMES)

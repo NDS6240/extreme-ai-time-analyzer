@@ -11,6 +11,15 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
+# --- חדש: ייבוא הרשימה המרכזית ---
+# זה הופך את הרשימה ב-report_parser למקור האמת היחיד לשמות
+try:
+    from report_parser import EMPLOYEE_NAMES as MASTER_EMPLOYEE_LIST
+except ImportError:
+    print("CRITICAL: Could not import EMPLOYEE_NAMES from report_parser.")
+    MASTER_EMPLOYEE_LIST = []
+# --- סוף קטע חדש ---
+
 
 # Master data cache
 _MASTER_DATA = None
@@ -30,7 +39,12 @@ def load_master_data(master_file: str = "master_employee.json") -> Dict:
     master_path = Path(master_file)
     if not master_path.exists():
         log_message(f"⚠️ Master file not found: {master_file}")
-        return {"master_employees": []}
+        # --- שונה: שימוש ברשימה המיובאת ---
+        _MASTER_DATA = {"master_employees": [{"employee_name": name} for name in MASTER_EMPLOYEE_LIST]}
+        _MASTER_EMPLOYEE_DICT = {name: {} for name in MASTER_EMPLOYEE_LIST}
+        log_message(f"✅ Loaded {len(_MASTER_EMPLOYEE_DICT)} names from (fallback) EMPLOYEE_NAMES list.")
+        return _MASTER_DATA
+        # --- סוף שינוי ---
     
     try:
         with open(master_path, "r", encoding="utf-8") as f:
@@ -38,19 +52,36 @@ def load_master_data(master_file: str = "master_employee.json") -> Dict:
         
         # Build lookup dict for quick access
         _MASTER_EMPLOYEE_DICT = {}
+        
+        # --- שונה: בנה את המילון על בסיס הרשימה המרכזית ---
+        # 1. הוסף את כל העובדים מהרשימה המרכזית
+        for name in MASTER_EMPLOYEE_LIST:
+            if name not in _MASTER_EMPLOYEE_DICT:
+                _MASTER_EMPLOYEE_DICT[name] = {
+                    "company_name": "",
+                    "standard_hours": 0.0
+                }
+        
+        # 2. עדכן פרטים מהקובץ (אם קיים)
         for emp in _MASTER_DATA.get("master_employees", []):
             name = emp.get("employee_name", "").strip()
-            if name:
+            if name in _MASTER_EMPLOYEE_DICT: # עדכן רק אם השם קיים ברשימה המרכזית
                 _MASTER_EMPLOYEE_DICT[name] = {
                     "company_name": emp.get("company_name", ""),
                     "standard_hours": emp.get("standard_hours", 0.0)
                 }
+        # --- סוף שינוי ---
         
-        log_message(f"✅ Loaded {len(_MASTER_EMPLOYEE_DICT)} employees from master file.")
+        log_message(f"✅ Loaded {len(_MASTER_EMPLOYEE_DICT)} employees from master list/file.")
         return _MASTER_DATA
     except Exception as e:
         log_message(f"❌ Error loading master file: {repr(e)}")
-        return {"master_employees": []}
+        # --- שונה: שימוש ברשימה המיובאת כגיבוי ---
+        _MASTER_DATA = {"master_employees": [{"employee_name": name} for name in MASTER_EMPLOYEE_LIST]}
+        _MASTER_EMPLOYEE_DICT = {name: {} for name in MASTER_EMPLOYEE_LIST}
+        log_message(f"✅ Loaded {len(_MASTER_EMPLOYEE_DICT)} names from (fallback) EMPLOYEE_NAMES list.")
+        return _MASTER_DATA
+        # --- סוף שינוי ---
 
 
 def get_master_employee_dict() -> Dict:
@@ -101,10 +132,13 @@ def match_employee_name(employee_name: str, master_names: Optional[List[str]] = 
     if not employee_name:
         return None, 0.0
     
+    # --- שונה: שימוש ברשימה המרכזית כברירת מחדל ---
     # Get master names if not provided
     if master_names is None:
-        master_dict = get_master_employee_dict()
-        master_names = list(master_dict.keys())
+        # master_dict = get_master_employee_dict() # כבר לא קורא מפה
+        # master_names = list(master_dict.keys())
+        master_names = MASTER_EMPLOYEE_LIST
+    # --- סוף שינוי ---
     
     if not master_names:
         return None, 0.0
@@ -192,7 +226,9 @@ def validate_and_unify_data(all_results: List[Dict], log_unmatched: bool = True)
         return []
     
     master_dict = get_master_employee_dict()
-    master_names = list(master_dict.keys())
+    # --- שונה: שימוש ברשימה המרכזית ---
+    master_names = MASTER_EMPLOYEE_LIST
+    # --- סוף שינוי ---
     
     validated_results = []
     seen_names = set()  # For duplicate prevention
@@ -397,7 +433,9 @@ def apply_vacation_completion(all_results: List[Dict], master_dict: Dict) -> Lis
         return all_results
 
     master_dict = master_dict or {}
-    master_names = list(master_dict.keys())
+    # --- שונה: שימוש ברשימה המרכזית ---
+    master_names = MASTER_EMPLOYEE_LIST
+    # --- סוף שינוי ---
 
     for result in all_results:
         if not isinstance(result, dict):
@@ -451,3 +489,4 @@ def apply_vacation_completion(all_results: List[Dict], master_dict: Dict) -> Lis
         )
 
     return all_results
+    

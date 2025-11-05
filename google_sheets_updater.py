@@ -10,7 +10,16 @@ from google.oauth2.service_account import Credentials
 from gspread.exceptions import WorksheetNotFound
 import re
 import difflib
-from datetime import datetime
+from datetime import datetime, timedelta
+
+# --- שונה: ייבוא הרשימה המרכזית ---
+try:
+    from report_parser import EMPLOYEE_NAMES as MASTER_EMPLOYEE_LIST
+except ImportError:
+    print("CRITICAL: Could not import EMPLOYEE_NAMES from report_parser.")
+    MASTER_EMPLOYEE_LIST = []
+# --- סוף קטע חדש ---
+
 from data_validator import (
     load_master_data, 
     get_master_employee_dict, 
@@ -60,6 +69,11 @@ def get_best_name_match(employee_name: str, master_names: list) -> str:
     Returns:
         Best matching name from master list, or "**CHECK: {name}" if no match found
     """
+    # --- חדש: בדיקה למניעת כפילות ---
+    if employee_name and employee_name.startswith("**CHECK:"):
+        return employee_name # השם כבר סומן כבעייתי, החזר אותו כמו שהוא
+    # --- סוף קטע חדש ---
+    
     if not employee_name or not master_names:
         if not master_names:
             return f"**CHECK: {employee_name}" if employee_name else employee_name
@@ -139,6 +153,11 @@ def deduplicate_results(all_results, employee_names=None):
     if not all_results:
         return []
 
+    # --- שונה: שימוש ברשימה המרכזית ---
+    if employee_names is None:
+        employee_names = MASTER_EMPLOYEE_LIST
+    # --- סוף שינוי ---
+
     flattened = []
     for item in all_results:
         base = {k: v for k, v in item.items() if k != "report_summary"}
@@ -152,9 +171,11 @@ def deduplicate_results(all_results, employee_names=None):
 
     # Step 1: Normalize keys with name unification (bidirectional RTL fix)
     if employee_names:
+        # --- חדש: תיקון כפילות CHECK ---
         df['unified_name'] = df['employee_name'].apply(
-            lambda x: get_best_name_match(x, employee_names) if pd.notna(x) else x
+            lambda x: x if x and x.startswith("**CHECK:") else get_best_name_match(x, employee_names) if pd.notna(x) else x
         )
+        # --- סוף קטע חדש ---
         # Use unified name for normalization
         df['norm_name'] = df['unified_name'].astype(str).str.strip().str.replace(r'[-"\']', ' ', regex=True).str.replace(
             r'\s+', ' ', regex=True).replace('None', 'UNKNOWN').replace('', 'UNKNOWN')
@@ -289,12 +310,17 @@ def update_google_sheets(all_results, employee_names=None):
         employee_names: Optional list of master employee names
     """
     print("\n🔄 Starting Google Sheets update...")
+    
+    # --- שונה: שימוש ברשימה המרכזית ---
+    if employee_names is None:
+        employee_names = MASTER_EMPLOYEE_LIST
+    # --- סוף שינוי ---
 
     client = authenticate()
     if not client:
         return
 
-    # Group results by period name first
+    # --- Group results by period name first ---
     results_by_period = {}
     for res in (all_results or []):
         period = res.get('report_period')
@@ -309,8 +335,41 @@ def update_google_sheets(all_results, employee_names=None):
         print("⚠️ No report periods found in results. Nothing to update.")
         return
 
-    # Current date for locking logic
+    # Current date for locking and correction logic
     current_date = datetime.now()
+    CORRECTION_WINDOW_DAYS = 7 
+    
+    # --- תיקון שם התקופה עבור הגשות מוקדמות ---
+    corrected_results_by_period = {}
+    for period, results in results_by_period.items():
+        period_clean = re.sub(r'[\"\',]', '', str(period)).strip()
+        period_date = _parse_period_to_date(period_clean)
+        
+        final_period_name = period_clean
+        
+        if (
+            period_date is not None
+            and current_date.day <= CORRECTION_WINDOW_DAYS
+            and period_date.year == current_date.year
+            and period_date.month == current_date.month
+        ):
+            # אם זה מוקדם בחודש (עד ה-7) והדוח הוא לחודש הנוכחי (למשל נובמבר)
+            last_month_date = current_date - timedelta(days=15)
+            last_month_name_heb = {
+                1: "ינואר", 2: "פברואר", 3: "מרץ", 4: "אפריל", 5: "מאי", 6: "יוני",
+                7: "יולי", 8: "אוגוסט", 9: "ספטמבר", 10: "אוקטובר", 11: "נובמבר", 12: "דצמבר"
+            }[last_month_date.month]
+            
+            final_period_name = f"{last_month_name_heb} {last_month_date.year}"
+            print(f"   - ⚠️ WARNING: Early '{period_clean}' submission. Correcting period to '{final_period_name}'.")
+
+        # קבץ את התוצאות לפי השם *המתוקן*
+        corrected_results_by_period.setdefault(final_period_name, []).extend(results)
+
+    # השתמש במילון המתוקן להמשך העדכון
+    results_by_period = corrected_results_by_period
+    # --- סוף קטע חדש ---
+
 
     try:
         # 2. Open Sheets
@@ -325,11 +384,15 @@ def update_google_sheets(all_results, employee_names=None):
             if not master_data:
                 print("⚠️ Master sheet is empty. Cannot create template.")
                 return
-            # Column [0] = Employee Name, [2] = Standard Hours (assuming 3 columns)
+            
             master_headers = master_data[0]
             master_employees_rows = master_data[1:]
-            master_employee_names = [row[0] for row in master_employees_rows if row]
-            print(f"   - {len(master_employee_names)} employees loaded from master.")
+            
+            # --- שונה: שימוש ברשימה המרכזית במקום ברשימה מהשיט ---
+            master_employee_names = MASTER_EMPLOYEE_LIST
+            print(f"   - {len(master_employee_names)} employees loaded from (code) master list.")
+            # --- סוף שינוי ---
+            
         except Exception as e:
             print(f"❌ Error reading master sheet: {repr(e)}")
             print("   - Ensure the master sheet is set up with columns in the first tab.")
@@ -338,7 +401,7 @@ def update_google_sheets(all_results, employee_names=None):
         # Iterate over each period and process independently with locking
         for report_period, period_results in results_by_period.items():
             # Locking: skip periods older than 2 months
-            period_clean = re.sub(r'[\"\',]', '', str(report_period)).strip()
+            period_clean = report_period # שימוש בשם המתוקן/נקי
             period_date = _parse_period_to_date(period_clean)
             if period_date is not None:
                 month_diff = (current_date.year - period_date.year) * 12 + (current_date.month - period_date.month)
@@ -363,12 +426,13 @@ def update_google_sheets(all_results, employee_names=None):
                 monthly_ws = data_sheet.add_worksheet(title=period_clean, rows=100, cols=30)
 
                 # Create headers in the new sheet
+                # --- שונה: הסרת עמודות מיותרות ---
                 data_headers = master_headers + [
                     TARGET_COLUMN_TITLE,  # Actual hours column
                     CALCULATED_COLUMN_TITLE,  # Calculated percentage column
-                    'file',  # For debugging
-                    'employee_id'  # For debugging
+                    # הוסרו: 'file', 'employee_id'
                 ]
+                # --- סוף קטע שונה ---
                 
                 monthly_ws.append_row(data_headers)
 
@@ -428,10 +492,10 @@ def update_google_sheets(all_results, employee_names=None):
                 print(f"❌ Cannot find target column '{TARGET_COLUMN_TITLE}' in data sheet. Check setup.")
                 continue
             
-            # Load master employee data for better matching
-            load_master_data()
-            master_dict = get_master_employee_dict()
-            master_names_from_json = list(master_dict.keys()) if master_dict else []
+            # --- שונה: שימוש ברשימה המרכזית ---
+            load_master_data() # עדיין נטען כדי לקבל שעות תקן וחברה
+            master_names_from_json = MASTER_EMPLOYEE_LIST
+            # --- סוף שינוי ---
             
             # Build enhanced row map (employee_name -> row_number) with multiple variants
             # Maps both normalized names and original names for flexible matching
@@ -469,10 +533,6 @@ def update_google_sheets(all_results, employee_names=None):
                 if not name:
                     continue
                 
-                # Remove CHECK prefix if exists for matching
-                if name.startswith('**CHECK:'):
-                    name = name.replace('**CHECK:', '').strip()
-
                 row_num = None
                 
                 # Strategy 1: Try exact match first
@@ -482,29 +542,10 @@ def update_google_sheets(all_results, employee_names=None):
                     if name_norm_lower in row_map_variants:
                         matched_name_in_sheet, row_num = row_map_variants[name_norm_lower]
                         matched_count += 1
-                        print(f"   ✅ Exact match: '{name}' -> '{matched_name_in_sheet}' (row {row_num})")
+                        # print(f"   ✅ Exact match: '{name}' -> '{matched_name_in_sheet}' (row {row_num})") # הפחתת רעש
                 
-                # Strategy 2: Try matching with master_employee.json (best source)
-                if not row_num and master_names_from_json:
-                    matched_name, match_ratio = match_employee_name(name, master_names_from_json, threshold=0.75)
-                    if matched_name and match_ratio >= 0.75:
-                        matched_norm = normalize_name(matched_name).lower()
-                        if matched_norm in row_map_variants:
-                            _, row_num = row_map_variants[matched_norm]
-                            matched_count += 1
-                            print(f"   ✅ Master JSON match: '{name}' -> '{matched_name}' (row {row_num}, ratio: {match_ratio:.2%})")
-                
-                # Strategy 3: Try matching with master_employee_names from Google Sheet
-                if not row_num and master_employee_names:
-                    matched_name, match_ratio = match_employee_name(name, master_employee_names, threshold=0.75)
-                    if matched_name and match_ratio >= 0.75:
-                        matched_norm = normalize_name(matched_name).lower()
-                        if matched_norm in row_map_variants:
-                            _, row_num = row_map_variants[matched_norm]
-                            matched_count += 1
-                            print(f"   ✅ Master Sheet match: '{name}' -> '{matched_name}' (row {row_num}, ratio: {match_ratio:.2%})")
-                
-                # Strategy 4: Fuzzy match against all names in row_map_variants
+                # --- שונה: אסטרטגיה 2,3,4 (Fuzzy) מאוחדות ---
+                # Strategy 2: Fuzzy match against all names in row_map_variants
                 if not row_num:
                     best_match_in_sheet = None
                     best_ratio = 0.0
@@ -521,32 +562,32 @@ def update_google_sheets(all_results, employee_names=None):
                         matched_count += 1
                         print(f"   ✅ Fuzzy match: '{name}' -> '{best_match_in_sheet}' (row {row_num}, ratio: {best_ratio:.2%})")
                 
-                # If still no match, add new row or skip
+                
+                # --- !!! תיקון מרכזי !!! ---
+                # אם לא מצאנו שורה תואמת, הוסף את השורה בסוף הגיליון
                 if not row_num:
                     unmatched_count += 1
-                    # Check if name exists in master list (to avoid false positives)
-                    is_in_master = False
-                    if master_names_from_json:
-                        matched_name, match_ratio = match_employee_name(name, master_names_from_json, threshold=0.5)
-                        if matched_name and match_ratio >= 0.5:
-                            is_in_master = True
                     
-                    name_norm_for_check = normalize_name(name).lower()
-                    is_in_sheet_master = name_norm_for_check in [normalize_name(n).lower() for n in master_employee_names]
+                    # השם המקורי כבר אמור להכיל "**CHECK:" אם הוא נכשל בולידציה
+                    original_name_from_result = result.get('employee_name', name) 
                     
-                    if is_in_master or is_in_sheet_master:
-                        print(f"   - ⚠️ Warning: Employee '{name}' exists in master but not found in sheet. Skipping.")
-                    else:
-                        print(f"   - ℹ️ New employee '{name}' not found anywhere, adding to sheet.")
-                        new_row_data = ["" for _ in headers]
-                        new_row_data[col_map[master_name_col_header] - 1] = name.strip()
-                        monthly_ws.append_row(new_row_data)
-                        row_num = len(all_data) + 1
-                        all_data.append(new_row_data)
-                        # Update maps
-                        row_map[name] = row_num
-                        if name_norm_for_check:
-                            row_map_variants[name_norm_for_check] = (name, row_num)
+                    print(f"   - ℹ️ Employee '{original_name_from_result}' not found in sheet. Adding as new row.")
+                    new_row_data = ["" for _ in headers]
+                    
+                    # מצא את עמודת השם והוסף את השם
+                    name_col_index = col_map[master_name_col_header] - 1
+                    new_row_data[name_col_index] = original_name_from_result.strip()
+                    
+                    # הוסף את השורה החדשה לגיליון
+                    monthly_ws.append_row(new_row_data, value_input_option='USER_ENTERED')
+                    
+                    # עדכן את המיפויים הפנימיים שלנו כדי למצוא את השורה הבאה
+                    row_num = len(all_data) + 1
+                    all_data.append(new_row_data) # הוסף לגרסה המקומית של הנתונים
+                    row_map[original_name_from_result] = row_num
+                    if name_norm:
+                        row_map_variants[name_norm] = (original_name_from_result, row_num)
+                # --- סוף התיקון ---
                 
                 # Update actual hours column
                 if row_num:
@@ -562,10 +603,11 @@ def update_google_sheets(all_results, employee_names=None):
                 monthly_ws.update_cells(updates_to_send, value_input_option='USER_ENTERED')
                 print(f"✅ Google Sheets update complete for '{period_clean}'!")
                 print(f"   - {matched_count} employees matched and updated")
-                print(f"   - {unmatched_count} employees could not be matched")
+                print(f"   - {unmatched_count} employees added as new rows")
                 print(f"   - {len(updates_to_send)} cells updated total")
             else:
                 print(f"✅ Google Sheets is already up to date for '{period_clean}'. No changes.")
 
     except Exception as e:
         print(f"❌ General error during Google Sheets update: {repr(e)}")
+    

@@ -17,10 +17,20 @@ try:
     # אנו מייבאים את הפונקציות והמשתנים הדרושים מהקובץ הקיים
     from google_sheets_updater import authenticate, MASTER_SHEET_URL
     import gspread
-    GSPREAD_AVAILABLE = True
+    GSPREAD_AVAILABLE = True # נשאר כדי לא לשבור ייבוא אחר
 except ImportError:
     print("⚠️ Could not import Google Sheets modules. Name list will rely on local 'terms_dictionary.json' only.")
     GSPREAD_AVAILABLE = False
+
+# --- חדש: ייבוא ספריית Fuzzy Matching ---
+try:
+    from thefuzz import process as fuzz_process
+    FUZZ_AVAILABLE = True
+except ImportError:
+    print("⚠️ WARNING: Library 'thefuzz' not found. Name hinting from email will be less accurate.")
+    print("Please run: pip install thefuzz")
+    FUZZ_AVAILABLE = False
+# --- סוף קטע חדש ---
 
 
 # =========================
@@ -39,66 +49,34 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALL_RESULTS = []
 
 # =========================
-#  NEW: Load Names from Master Sheet
+#  --- הרשימה הסופית (Single Source of Truth) ---
 # =========================
-def _load_names_from_master_sheet() -> list:
-    """
-    Fetches the employee name list directly from the Master Google Sheet.
-    """
-    if not GSPREAD_AVAILABLE:
-        print("ℹ️ GSpread not available, skipping Master Sheet name load.")
-        return []
-
-    print("ℹ️ Fetching employee name list from Master Google Sheet...")
-    try:
-        client = authenticate()
-        if not client:
-            print("⚠️ Could not authenticate to Google Sheets to get name list.")
-            return []
-        
-        master_sheet = client.open_by_url(MASTER_SHEET_URL)
-        master_ws = master_sheet.get_worksheet(0) # First tab
-        
-        # Fetch all values from the first column (A) after the header
-        # [1:] to skip header row
-        names_list = master_ws.col_values(1)[1:] 
-        
-        # Clean list
-        cleaned_names = [name.strip() for name in names_list if name and name.strip()]
-        
-        if cleaned_names:
-            print(f"✅ Loaded {len(cleaned_names)} names from Master Sheet.")
-            return cleaned_names
-        else:
-            print("⚠️ Master Sheet name column is empty.")
-            return []
-    except Exception as e:
-        print(f"❌ Error loading names from Master Sheet: {repr(e)}")
-        return []
-
-# --- Load Employee Names List Globally (MODIFIED) ---
-EMPLOYEE_NAMES = []
-
-# 1. Try to load from local 'terms_dictionary.json' as a fallback
-try:
-    with open("terms_dictionary.json", "r", encoding="utf-8") as f:
-        EMPLOYEE_NAMES = json.load(f).get("employee_names", [])
-        if DEBUG and EMPLOYEE_NAMES:
-            print(f"💡 Loaded {len(EMPLOYEE_NAMES)} names from local 'terms_dictionary.json' (fallback).")
-except Exception as e:
-    # This is not critical, just a fallback
-    pass
-
-# 2. Try to load from Google Master Sheet (will override local list)
-master_sheet_names = _load_names_from_master_sheet()
-
-if master_sheet_names:
-    # Combine and deduplicate, giving priority to master sheet names
-    EMPLOYEE_NAMES = list(dict.fromkeys(master_sheet_names + EMPLOYEE_NAMES))
-    if DEBUG:
-        print(f"💡 Final combined employee name list contains {len(EMPLOYEE_NAMES)} unique names.")
-elif not EMPLOYEE_NAMES:
-    print("⚠️ No employee names loaded from any source. Name matching fallback will be less accurate.")
+# כל הלוגיקה של טעינת שמות מגוגל שיטס וקבצים הוסרה.
+# זו הרשימה היחידה שהמערכת תכיר.
+EMPLOYEE_NAMES = [
+    "מוריה פיטוסי", "אור כהן", "מאיה פוזנרסון", "שמואל קריסי", "מינה גרינבלט",
+    "אברהם שורין", "מיכאל סטולברג", "בני בלאושטיין", "אפרת כהן", "זיוה אזולאי",
+    "אלה קוגן", "שרית חודטוב", "נורית מור", "גלעד ספטי", "אלכסנדר גופמן",
+    "עומר כהן", "קרן וויגלמן", "דניאלה ליבמן", "תומר ריידר", "מריוס קולנברג",
+    "פול מלטסב", "דויד קליין", "שרון סדרייב", "איליה פינקלשטיין", "יניב עמרמי",
+    "אלון גרוס", "ריקי קורלנסקי", "ישראל פרידמן", "אנטון אבולניקוב", "בוריס מוראדוב",
+    "אוריאל אבני", "אורי רדו", "וסילי בוגייבסקי", "זויה ציבולסקיה", "חן שחר כהן",
+    "יונתן מיימון", "לילך מקייטן", "מיכל פרץ", "מאיר שמייב", "דוראל בן חמו",
+    "אבי כתב", "אבי מוטובה", "אביה אלטויל", "אברהם כהנא", "אודה-ליה ורבנר",
+    "אלכסנדר בורדו", "אלכסנדר זברודסקי", "אנתוני אביב לוי", "אפרת מרקוביץ",
+    "בן מרחוזי", "דני קון", "הילה בראון", "ולדימיר סוסקין", "זוהר לנגבורד",
+    "חגי שגיא", "חיים תירוש", "יוסי מלכי", "מור גורן מישרין", "מילנה איזמאילוב",
+    "מעיין מיטל", "מרגריטה פודגור", "מרום טואיטו", "ניב נתנאל", "נעה שנפ",
+    "נעם טבק", "נעם לבינסקי", "נריה סבן", "סול מיכאלי", "סיון לנגר מרום",
+    "סלבה בייטמן", "עדי סולומון", "ענת חזן", "שחר חברוני", "שירן צדקה",
+    "שלמה ברנד", "שרה לוי", "שרי אבני", "אמיר זחאלקה", "ויקטוריה ארליכמן",
+    "זאב סוסקין", "ליאור הס", "מנחם מאור עבוש", "ניר דיאמנט", "סמואל איסנין",
+    "קיריל מילטיצקי", "שרית"
+]
+print(f"✅ Loaded {len(EMPLOYEE_NAMES)} names from definitive master list.")
+# =========================
+#  סוף הרשימה
+# =========================
 
 
 # =========================
@@ -542,10 +520,60 @@ def _find_name_with_regex(text: str) -> str | None:
 
 
 # =========================
+#  שדרוג: חיפוש שם חכם (Fuzzy) במטא-דאטה של המייל
+# =========================
+def _find_name_from_email_metadata(metadata: dict, employee_list: list) -> str | None:
+    """
+    Searches email metadata (subject, from, body) for a name from the employee_list
+    using fuzzy matching.
+    """
+    if not metadata or not employee_list or not FUZZ_AVAILABLE:
+        if FUZZ_AVAILABLE == False and DEBUG:
+            print("  DEBUG: 'thefuzz' library not loaded, skipping fuzzy metadata search.")
+        return None
+
+    # איחוד כל הטקסט מהמטא-דאטה למחרוזת חיפוש אחת
+    subject = metadata.get("subject", "")
+    from_ = metadata.get("from", "")
+    body_snippet = metadata.get("body_snippet", "")
+    
+    search_text = f"{subject} {from_} {body_snippet}".replace(">", " ").replace("<", " ").replace("[mailto:", " ")
+    
+    if DEBUG:
+        print(f"  DEBUG: Searching for name in email metadata...")
+        print(f"  DEBUG: Search Text Snippet: {search_text[:250]}...")
+
+    # --- שימוש ב-Fuzzy Matching ---
+    # מחלץ את ההתאמה הטובה ביותר מתוך הטקסט
+    # score_cutoff=90 דורש התאמה גבוהה מאוד (למשל "מיני גרינבלט" יתאים ל"מינה גרינבלט")
+    best_match = fuzz_process.extractOne(search_text, employee_list, score_cutoff=90)
+    
+    if best_match:
+        # best_match הוא (שם, ציון)
+        matched_name = best_match[0]
+        if DEBUG: print(f"  ✅ Found name hint from Email Metadata: '{matched_name}' (Score: {best_match[1]})")
+        return matched_name
+
+    # --- אם נכשל, נסה בדיקה פשוטה (fallback) ---
+    # זה יתפוס שמות שהם חלק מהרשימה (כמו "אמיר זחאלקה" שמופיע במדויק)
+    for name in sorted(employee_list, key=len, reverse=True):
+        if not name or len(name) < 5: 
+            continue
+        if name in search_text:
+            if DEBUG: print(f"  ✅ Found name hint from Email Metadata (Simple Check): '{name}'")
+            return name
+    # --- סוף קטע ---
+
+    if DEBUG: print(f"  ℹ️ No name hint found in email metadata.")
+    return None
+
+
+# =========================
 #  LLM call (Modified with Blacklist)
 # =========================
 def _analyze_text_with_llm(raw_text: str, file_name: str, hints: dict | None = None,
-                           name_hint: str | None = None) -> dict | None:
+                           name_hint_regex: str | None = None, 
+                           name_hint_email: str | None = None) -> dict | None: # <-- שדות חדשים
     """
     Send the raw text to the model and get structured JSON back.
     Now accepts a `name_hint` and uses the blacklist.
@@ -585,9 +613,9 @@ The name in the text might be a close match, not an exact one.
 Known names: [{names_str}]
 """
 
-    # --- START OF EDITED SECTION 1: name_instruction ---
-    name_instruction = ""
-    name_hint_to_use = name_hint if name_hint else "None"
+    # --- START OF EDITED SECTION 1: name_instruction (עם עדיפות לרמז מהמייל) ---
+    name_hint_regex_to_use = name_hint_regex if name_hint_regex else "None"
+    name_hint_email_to_use = name_hint_email if name_hint_email else "None"
 
     name_instruction = f"""
 **CRITICAL RULES FOR "employee_name":**
@@ -599,19 +627,22 @@ Known names: [{names_str}]
 2.  **AVOID THE "MINEFIELD" (Blacklist):**
     - You **MUST NOT** extract these words as a name: {blacklist_str}.
 
-3.  **USE THE HINTS (Regex/File):**
-    - A Regex search provided this hint: "{name_hint_to_use}".
+3.  **USE THE HINTS (Email has PRIORITY):**
+    - **Hint 1 (From Email Metadata - HIGH PRIORITY):** "{name_hint_email_to_use}"
+    - **Hint 2 (From File Content Regex - LOW PRIORITY):** "{name_hint_regex_to_use}"
     - The filename is: "{file_name}".
+
     - **Your Priority:**
-        a) If the Regex hint ("{name_hint_to_use}") is valid (not "None" and not in the MINEFIELD), **USE IT**. (And fix it if it's reversed).
-        b) If the hint is invalid, search the text body for labels like "שם העובד" or "עובד:".
-        c) If you still can't find a name, **check the filename "{file_name}"** for a human name (e.g., "חיים תירוש").
+        a) If **Hint 1** ("{name_hint_email_to_use}") is valid (not "None" and not in the MINEFIELD), **USE IT**. (And fix it if it's reversed).
+        b) If **Hint 1** is invalid, check if **Hint 2** ("{name_hint_regex_to_use}") is valid (not "None" and not in the MINEFIELD). If yes, **USE IT**. (And fix it if it's reversed).
+        c) If both hints are invalid, search the text body for labels like "שם העובד" or "עובד:".
+        d) If you still can't find a name, **check the filename "{file_name}"** for a human name (e.g., "חיים תירוש").
 
 4.  **FINAL CHECK:** The name must be a human name, not a label.
 """
     # --- END OF EDITED SECTION 1 ---
 
-    # --- START OF EDITED SECTION 2: flexibility_instruction ---
+    # --- START OF EDITED SECTION 2: flexibility_instruction (ללא שינוי) ---
     flexibility_instruction = """
 **CRITICAL RULES FOR NUMERIC DATA:**
 
@@ -736,7 +767,7 @@ Text to analyze:
 # =========================
 #  Public API (Modified)
 # =========================
-def parse_report(file_path: str) -> dict:
+def parse_report(file_path: str, email_metadata: dict | None = None) -> dict: # <-- חתימה מעודכנת
     """
     Detect file type, extract text (with OCR fallback for PDFs), send to LLM,
     and return a dict aligned with main.py printing logic.
@@ -807,7 +838,13 @@ def parse_report(file_path: str) -> dict:
             if v is not None:
                 numeric_hints[k] = float(v)
 
-        # === NEW: Try to find name with Regex FIRST (with list backup) ===
+        # === חדש: חיפוש שם במטא-דאטה של המייל (עם Fuzzy) ===
+        name_hint_from_email = None
+        if email_metadata:
+            name_hint_from_email = _find_name_from_email_metadata(email_metadata, EMPLOYEE_NAMES)
+        # === סוף קטע חדש ===
+
+        # === קיים: חיפוש שם בקובץ עצמו ===
         name_hint_from_regex = _find_name_with_regex(raw_text)
 
         # 2) LLM analysis → structured JSON
@@ -815,7 +852,8 @@ def parse_report(file_path: str) -> dict:
             raw_text,
             file_name,
             hints=numeric_hints,
-            name_hint=name_hint_from_regex
+            name_hint_regex=name_hint_from_regex, # <-- רמז מהקובץ
+            name_hint_email=name_hint_from_email  # <-- רמז מהמייל (עדיפות עליונה)
         )
         
         # --- *** START: DEBUG TIMING *** ---
@@ -870,10 +908,11 @@ def parse_report(file_path: str) -> dict:
         
         # --- *** START: DEBUG TIMING *** ---
         t_end = time.time()
-        print(f"  DEBUG: Text extraction took: {t_text_extracted - t_start:.2f}s")
-        print(f"  DEBUG: LLM analysis took: {t_llm_done - t_text_extracted:.2f}s")
-        print(f"  DEBUG: Post-processing took: {t_end - t_llm_done:.2f}s")
-        print(f"  DEBUG: Total parse time: {t_end - t_start:.2f}s")
+        if DEBUG: # רק אם דיבאג דלוק
+            print(f"  DEBUG: Text extraction took: {t_text_extracted - t_start:.2f}s")
+            print(f"  DEBUG: LLM analysis took: {t_llm_done - t_text_extracted:.2f}s")
+            print(f"  DEBUG: Post-processing took: {t_end - t_llm_done:.2f}s")
+            print(f"  DEBUG: Total parse time: {t_end - t_start:.2f}s")
         # --- *** END: DEBUG TIMING *** ---
 
         return result
@@ -922,3 +961,4 @@ def export_all_results():
 
     except Exception as e:
         print(f"⚠️ Failed to export consolidated parsed results: {e}")
+        

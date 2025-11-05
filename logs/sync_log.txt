@@ -1197,3 +1197,1050 @@
 [2025-11-04 13:22:32] ============================================================
 
 [2025-11-04 13:22:32] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-04.xlsx
+[2025-11-04 13:48:07] ✅ Loaded 77 employees from master file.
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'אברהם כהנא' — added 32.30 hours, remaining vacation days: 0.24
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 32.80 hours, remaining vacation days: 27.19
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'מיכל פרץ' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 64.50 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'אוריאל אבני' — added 77.40 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'חן שחר כהן' — added 32.80 hours, remaining vacation days: 477.19
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'יונתן מימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-04 13:48:07] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-04 13:48:07] 
+============================================================
+[2025-11-04 13:48:07] Starting data validation for 64 reports
+[2025-11-04 13:48:07] ============================================================
+
+[2025-11-04 13:48:07] Report 1: No employee name found
+[2025-11-04 13:48:07] Report 2: No employee name found
+[2025-11-04 13:48:07] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] Report 4: No employee name found
+[2025-11-04 13:48:07] ⚠️ Report 5: Irregular hours for 'מילנה איזמאילוב': 145.33 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 5: 'מילנה איזמאילוב' → 'מילנה איזמאילוב' (match: 100.00%, status: ⚠️ Irregular Hours (24.6% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 6: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-04 13:48:07] ✅ Report 6: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 7: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-04 13:48:07] ✅ Report 8: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 9: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-04 13:48:07] ✅ Report 10: 'אלכסנדר מישרין' → 'אלכסנדר גופמן' (match: 74.07%, status: No validation)
+[2025-11-04 13:48:07] ⚠️ Report 11: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 60.00%)
+[2025-11-04 13:48:07] ⚠️ Report 12: Duplicate found for 'אברהם כהנא' - merging data
+[2025-11-04 13:48:07] ⚠️ Report 13: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-04 13:48:07] ✅ Report 13: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-04 13:48:07] ✅ Report 14: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-04 13:48:07] ⚠️ Report 15: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 15: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-04 13:48:07] ✅ Report 16: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 17: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 17: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 18: Irregular hours for 'שרית חודטוב': 138.41 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 18: 'שרית חודאטוב' → 'שרית חודטוב' (match: 95.65%, status: ⚠️ Irregular Hours (28.2% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 19: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 19: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 20: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-04 13:48:07] ✅ Report 20: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 21: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-04 13:48:07] ⚠️ Report 22: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 22: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-04 13:48:07] Report 23: No employee name found
+[2025-11-04 13:48:07] ⚠️ Report 24: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 24: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 25: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 25: 'אנטון אבוליקוב' → 'אנטון אבולניקוב' (match: 96.55%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 26: Irregular hours for 'שרון סדרייב': 155.5 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 26: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: ⚠️ Irregular Hours (19.3% deviation))
+[2025-11-04 13:48:07] ✅ Report 27: 'וסילי בוגייבסקי' → 'וסילי בוגייבסקי' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 28: Irregular hours for 'ישראל פרידמן': 161.41 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 28: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.3% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 29: Unmatched employee 'אירה רומיט' (best match ratio: 60.00%)
+[2025-11-04 13:48:07] ⚠️ Report 30: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-04 13:48:07] ⚠️ Report 31: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 31: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 32: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-04 13:48:07] ✅ Report 33: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 34: Irregular hours for 'מיכאל סטולברג': 117.51 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 34: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (39.1% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 35: Duplicate found for 'אברהם כהנא' - merging data
+[2025-11-04 13:48:07] ✅ Report 36: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 37: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-04 13:48:07] ✅ Report 38: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 39: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-04 13:48:07] Report 40: No employee name found
+[2025-11-04 13:48:07] ✅ Report 41: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 42: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 42: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-04 13:48:07] ✅ Report 43: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 44: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-04 13:48:07] ⚠️ Report 45: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 45: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 46: Irregular hours for 'מאיה פוזנרסון': 92.48 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 46: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (52.0% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 47: Duplicate found for 'אלכסנדר גופמן' - merging data
+[2025-11-04 13:48:07] ⚠️ Report 48: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 48: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-04 13:48:07] ✅ Report 49: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 50: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-04 13:48:07] ⚠️ Report 51: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-04 13:48:07] ⚠️ Report 52: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 52: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-04 13:48:07] ⚠️ Report 54: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 54: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-04 13:48:07] ✅ Report 55: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 56: Irregular hours for 'זיוה אזולאי': 130.46 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 56: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (32.3% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 57: Unmatched employee 'סיטרכ דבוע' (best match ratio: 52.63%)
+[2025-11-04 13:48:07] ⚠️ Report 58: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 58: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-04 13:48:07] ✅ Report 59: 'יונתן מימון' → 'יונתן מיימון' (match: 95.65%, status: OK)
+[2025-11-04 13:48:07] ✅ Report 60: 'דוראל בן-חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-04 13:48:07] ⚠️ Report 61: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-04 13:48:07] ⚠️ Report 62: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 62: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 63: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 63: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-04 13:48:07] ⚠️ Report 64: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-04 13:48:07] ✅ Report 64: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-04 13:48:07] 
+============================================================
+[2025-11-04 13:48:07] Validation Summary:
+[2025-11-04 13:48:07]   - Total reports: 64
+[2025-11-04 13:48:07]   - Matched employees: 41
+[2025-11-04 13:48:07]   - Unmatched employees: 12
+[2025-11-04 13:48:07]   - Irregular hours: 26
+[2025-11-04 13:48:07] ============================================================
+
+[2025-11-04 13:48:07] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-04.xlsx
+[2025-11-04 13:57:06] ✅ Loaded 77 employees from master file.
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'אברהם כהנא' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 32.80 hours, remaining vacation days: 27.19
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'מיכל פרץ' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 64.50 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'אוריאל אבני' — added 77.40 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'חן שחר כהן' — added 32.80 hours, remaining vacation days: 477.19
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'יונתן מימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-04 13:57:06] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-04 13:57:06] 
+============================================================
+[2025-11-04 13:57:06] Starting data validation for 65 reports
+[2025-11-04 13:57:06] ============================================================
+
+[2025-11-04 13:57:06] Report 1: No employee name found
+[2025-11-04 13:57:06] Report 2: No employee name found
+[2025-11-04 13:57:06] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] Report 4: No employee name found
+[2025-11-04 13:57:06] ⚠️ Report 5: Irregular hours for 'מילנה איזמאילוב': 145.33 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 5: 'מילנה איזמאילוב' → 'מילנה איזמאילוב' (match: 100.00%, status: ⚠️ Irregular Hours (24.6% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 6: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-04 13:57:06] ✅ Report 6: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 7: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-04 13:57:06] ✅ Report 8: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 9: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-04 13:57:06] ✅ Report 10: 'אלכסנדר מישרין' → 'אלכסנדר גופמן' (match: 74.07%, status: No validation)
+[2025-11-04 13:57:06] ⚠️ Report 11: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 60.00%)
+[2025-11-04 13:57:06] ⚠️ Report 12: Duplicate found for 'אברהם כהנא' - merging data
+[2025-11-04 13:57:06] ⚠️ Report 13: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-04 13:57:06] ✅ Report 13: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-04 13:57:06] ✅ Report 14: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-04 13:57:06] ⚠️ Report 15: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 15: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-04 13:57:06] ✅ Report 16: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 17: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 17: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 18: Irregular hours for 'שרית חודטוב': 138.41 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 18: 'שרית חודאטוב' → 'שרית חודטוב' (match: 95.65%, status: ⚠️ Irregular Hours (28.2% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 19: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 19: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 20: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-04 13:57:06] ✅ Report 20: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 21: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-04 13:57:06] ⚠️ Report 22: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 22: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-04 13:57:06] Report 23: No employee name found
+[2025-11-04 13:57:06] ⚠️ Report 24: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 24: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 25: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 25: 'אנטון אבוליקוב' → 'אנטון אבולניקוב' (match: 96.55%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 26: Irregular hours for 'שרון סדרייב': 159.05 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 26: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-04 13:57:06] ✅ Report 27: 'וסילי בוגייבסקי' → 'וסילי בוגייבסקי' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 28: Irregular hours for 'ישראל פרידמן': 161.68 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 28: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.1% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 29: Unmatched employee 'אירה רומיט' (best match ratio: 60.00%)
+[2025-11-04 13:57:06] ⚠️ Report 30: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-04 13:57:06] ⚠️ Report 31: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 31: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 32: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-04 13:57:06] ✅ Report 33: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 34: Irregular hours for 'מיכאל סטולברג': 117.51 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 34: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (39.1% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 35: Duplicate found for 'אברהם כהנא' - merging data
+[2025-11-04 13:57:06] ✅ Report 36: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 37: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-04 13:57:06] ✅ Report 38: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 39: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-04 13:57:06] Report 40: No employee name found
+[2025-11-04 13:57:06] ✅ Report 41: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 42: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 42: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-04 13:57:06] ✅ Report 43: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 44: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-04 13:57:06] ⚠️ Report 45: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 45: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 46: Irregular hours for 'מאיה פוזנרסון': 92.48 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 46: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (52.0% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 47: Duplicate found for 'אלכסנדר גופמן' - merging data
+[2025-11-04 13:57:06] ⚠️ Report 48: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 48: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-04 13:57:06] ✅ Report 49: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 50: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-04 13:57:06] Report 51: No employee name found
+[2025-11-04 13:57:06] ⚠️ Report 52: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 52: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-04 13:57:06] ⚠️ Report 54: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 54: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-04 13:57:06] ✅ Report 55: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 56: Irregular hours for 'זיוה אזולאי': 130.46 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 56: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (32.3% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 57: Unmatched employee 'סיטרכ דבוע' (best match ratio: 52.63%)
+[2025-11-04 13:57:06] ⚠️ Report 58: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 58: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-04 13:57:06] ✅ Report 59: 'יונתן מימון' → 'יונתן מיימון' (match: 95.65%, status: OK)
+[2025-11-04 13:57:06] ✅ Report 60: 'דוראל בן-חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-04 13:57:06] ⚠️ Report 61: Irregular hours for 'דניאלה ליבמן': 147.36 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 61: 'דניאלה ליבמן' → 'דניאלה ליבמן' (match: 100.00%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 62: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-04 13:57:06] ⚠️ Report 63: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 63: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 64: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 64: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-04 13:57:06] ⚠️ Report 65: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-04 13:57:06] ✅ Report 65: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-04 13:57:06] 
+============================================================
+[2025-11-04 13:57:06] Validation Summary:
+[2025-11-04 13:57:06]   - Total reports: 65
+[2025-11-04 13:57:06]   - Matched employees: 42
+[2025-11-04 13:57:06]   - Unmatched employees: 11
+[2025-11-04 13:57:06]   - Irregular hours: 27
+[2025-11-04 13:57:06] ============================================================
+
+[2025-11-04 13:57:06] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-04.xlsx
+[2025-11-05 14:42:19] ✅ Loaded 77 employees from master file.
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'אברהם כהנא' — added 32.30 hours, remaining vacation days: 0.24
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'אבי מוטובה' — added 32.80 hours, remaining vacation days: 27.19
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'מיכל פרץ' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 57.80 hours, remaining vacation days: 0.78
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'אוריאל אבני' — added 77.40 hours, remaining vacation days: 0.00
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'חן שחר כהן' — added 32.80 hours, remaining vacation days: 477.19
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'יונתן מימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-05 14:42:19] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-05 14:42:19] 
+============================================================
+[2025-11-05 14:42:19] Starting data validation for 67 reports
+[2025-11-05 14:42:19] ============================================================
+
+[2025-11-05 14:42:19] Report 1: No employee name found
+[2025-11-05 14:42:19] Report 2: No employee name found
+[2025-11-05 14:42:19] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] Report 4: No employee name found
+[2025-11-05 14:42:19] ⚠️ Report 5: Irregular hours for 'מילנה איזמאילוב': 145.33 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 5: 'מילנה איזמאילוב' → 'מילנה איזמאילוב' (match: 100.00%, status: ⚠️ Irregular Hours (24.6% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 6: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-05 14:42:19] ✅ Report 6: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 7: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-05 14:42:19] ✅ Report 8: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 9: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-05 14:42:19] Report 10: No employee name found
+[2025-11-05 14:42:19] ✅ Report 11: 'אלכסנדר גלרוד' → 'אלכסנדר בורדו' (match: 76.92%, status: No validation)
+[2025-11-05 14:42:19] ⚠️ Report 12: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 60.00%)
+[2025-11-05 14:42:19] ⚠️ Report 13: Duplicate found for 'אברהם כהנא' - merging data
+[2025-11-05 14:42:19] ⚠️ Report 14: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-05 14:42:19] ✅ Report 14: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-05 14:42:19] ✅ Report 15: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-05 14:42:19] ⚠️ Report 16: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 16: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-05 14:42:19] ✅ Report 17: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 18: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 18: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 19: Irregular hours for 'שרית חודטוב': 138.41 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 19: 'שרית חודאטוב' → 'שרית חודטוב' (match: 95.65%, status: ⚠️ Irregular Hours (28.2% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 20: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 20: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 21: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-05 14:42:19] ✅ Report 21: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 22: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-05 14:42:19] ⚠️ Report 23: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 23: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-05 14:42:19] Report 24: No employee name found
+[2025-11-05 14:42:19] ⚠️ Report 25: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 25: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 26: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 26: 'אנטון אבוליקוב' → 'אנטון אבולניקוב' (match: 96.55%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 27: Irregular hours for 'שרון סדרייב': 155.5 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 27: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: ⚠️ Irregular Hours (19.3% deviation))
+[2025-11-05 14:42:19] ✅ Report 28: 'אבי מוטובה' → 'אבי מוטובה' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 29: Irregular hours for 'ישראל פרידמן': 161.68 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 29: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.1% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 30: Unmatched employee 'רומיט לאירא' (best match ratio: 63.64%)
+[2025-11-05 14:42:19] ⚠️ Report 31: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-05 14:42:19] ⚠️ Report 32: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 32: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 33: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-05 14:42:19] ✅ Report 34: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 35: Irregular hours for 'מיכאל סטולברג': 117.51 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 35: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (39.1% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 36: Duplicate found for 'אברהם כהנא' - merging data
+[2025-11-05 14:42:19] ✅ Report 37: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 38: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-05 14:42:19] ✅ Report 39: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 40: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-05 14:42:19] Report 41: No employee name found
+[2025-11-05 14:42:19] ✅ Report 42: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 43: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 43: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-05 14:42:19] ✅ Report 44: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 45: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-05 14:42:19] ⚠️ Report 46: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 46: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 47: Irregular hours for 'מאיה פוזנרסון': 92.48 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 47: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (52.0% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 48: Irregular hours for 'אור כהן': 94.48 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 48: 'אור כהן' → 'אור כהן' (match: 100.00%, status: ⚠️ Irregular Hours (51.0% deviation))
+[2025-11-05 14:42:19] ✅ Report 49: 'אלכסנדר גופמן' → 'אלכסנדר גופמן' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 50: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 50: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-05 14:42:19] ✅ Report 51: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 52: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-05 14:42:19] ⚠️ Report 53: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-05 14:42:19] ⚠️ Report 54: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 54: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 55: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-05 14:42:19] ⚠️ Report 56: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 56: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-05 14:42:19] ✅ Report 57: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 58: Irregular hours for 'זיוה אזולאי': 130.46 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 58: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (32.3% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 59: Unmatched employee 'סיטרכ דבוע' (best match ratio: 52.63%)
+[2025-11-05 14:42:19] ⚠️ Report 60: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 60: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-05 14:42:19] ✅ Report 61: 'יונתן מימון' → 'יונתן מיימון' (match: 95.65%, status: OK)
+[2025-11-05 14:42:19] ✅ Report 62: 'דוראל בן-חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-05 14:42:19] ⚠️ Report 63: Irregular hours for 'דניאלה ליבמן': 147.36 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 63: 'דניאלה ליבמן' → 'דניאלה ליבמן' (match: 100.00%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 64: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-05 14:42:19] ⚠️ Report 65: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 65: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 66: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 66: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-05 14:42:19] ⚠️ Report 67: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-05 14:42:19] ✅ Report 67: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 14:42:19] 
+============================================================
+[2025-11-05 14:42:19] Validation Summary:
+[2025-11-05 14:42:19]   - Total reports: 67
+[2025-11-05 14:42:19]   - Matched employees: 44
+[2025-11-05 14:42:19]   - Unmatched employees: 12
+[2025-11-05 14:42:19]   - Irregular hours: 28
+[2025-11-05 14:42:19] ============================================================
+
+[2025-11-05 14:42:20] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx
+[2025-11-05 14:51:39] ✅ Loaded 77 employees from master file.
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'שרי אבני' — added 32.55 hours, remaining vacation days: 15.22
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 10.80 hours, remaining vacation days: 0.74
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 32.30 hours, remaining vacation days: 27.24
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'לילך מקייטן' — added 7.39 hours, remaining vacation days: 20.14
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'לילך מקייטן' — added 7.39 hours, remaining vacation days: 4.14
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'מיכל פרץ' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 64.50 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'אוריאל אבני' — added 77.40 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'חן שחר כהן' — added 32.80 hours, remaining vacation days: 477.19
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'יונתן מיימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-05 14:51:39] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-05 14:51:39] 
+============================================================
+[2025-11-05 14:51:39] Starting data validation for 65 reports
+[2025-11-05 14:51:39] ============================================================
+
+[2025-11-05 14:51:39] ⚠️ Report 1: Irregular hours for 'מור גורן מישרין': 83.96 vs 191.8 standard
+[2025-11-05 14:51:39] ✅ Report 1: 'מור גורן מישרין' → 'מור גורן מישרין' (match: 100.00%, status: ⚠️ Irregular Hours (56.2% deviation))
+[2025-11-05 14:51:39] Report 2: No employee name found
+[2025-11-05 14:51:39] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 4: Unmatched employee 'חוטיב רכז' (best match ratio: 50.00%)
+[2025-11-05 14:51:39] ⚠️ Report 5: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-05 14:51:39] ✅ Report 5: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 6: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-05 14:51:39] ⚠️ Report 7: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-05 14:51:39] ✅ Report 8: 'שרי אבני' → 'שרי אבני' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 9: Duplicate found for 'מור גורן מישרין' - merging data
+[2025-11-05 14:51:39] ✅ Report 10: 'וסילי בוגייבסקי' → 'וסילי בוגייבסקי' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ✅ Report 11: 'דוראל בן חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 12: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-05 14:51:39] ✅ Report 12: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-05 14:51:39] ✅ Report 13: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-05 14:51:39] ⚠️ Report 14: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 14: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-05 14:51:39] ✅ Report 15: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 16: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 16: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 17: Irregular hours for 'שרית חודטוב': 138.41 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 17: 'שרית חודאטוב' → 'שרית חודטוב' (match: 95.65%, status: ⚠️ Irregular Hours (28.2% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 18: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 18: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 19: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-05 14:51:39] ✅ Report 19: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 20: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-05 14:51:39] ⚠️ Report 21: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 21: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-05 14:51:39] Report 22: No employee name found
+[2025-11-05 14:51:39] ⚠️ Report 23: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 23: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 24: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 24: 'אנטון אבולניקוב' → 'אנטון אבולניקוב' (match: 100.00%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 25: Irregular hours for 'שרון סדרייב': 155.5 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 25: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: ⚠️ Irregular Hours (19.3% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 26: Duplicate found for 'וסילי בוגייבסקי' - merging data
+[2025-11-05 14:51:39] ⚠️ Report 27: Irregular hours for 'ישראל פרידמן': 161.41 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 27: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.3% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 28: Unmatched employee 'לאירא רומיט' (best match ratio: 57.14%)
+[2025-11-05 14:51:39] ⚠️ Report 29: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-05 14:51:39] ⚠️ Report 30: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 30: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 31: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-05 14:51:39] ✅ Report 32: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 33: Irregular hours for 'מיכאל סטולברג': 117.51 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 33: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (39.1% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 34: Irregular hours for 'אברהם כהנא': 122.5 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 34: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: ⚠️ Irregular Hours (36.5% deviation))
+[2025-11-05 14:51:39] ✅ Report 35: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 36: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-05 14:51:39] ✅ Report 37: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 38: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-05 14:51:39] ⚠️ Report 39: Duplicate found for 'לילך מקייטן' - merging data
+[2025-11-05 14:51:39] ✅ Report 40: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 41: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 41: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-05 14:51:39] ✅ Report 42: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 43: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-05 14:51:39] ⚠️ Report 44: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 44: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 45: Irregular hours for 'מאיה פוזנרסון': 98.96 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 45: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (48.7% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 46: Irregular hours for 'אור כהן': 94.48 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 46: 'אור כהן' → 'אור כהן' (match: 100.00%, status: ⚠️ Irregular Hours (51.0% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 47: Irregular hours for 'אלכסנדר גופמן': 145.5 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 47: 'אלכסנדר גופמן' → 'אלכסנדר גופמן' (match: 100.00%, status: ⚠️ Irregular Hours (24.5% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 48: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 48: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-05 14:51:39] ✅ Report 49: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 50: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-05 14:51:39] Report 51: No employee name found
+[2025-11-05 14:51:39] ⚠️ Report 52: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 52: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-05 14:51:39] ⚠️ Report 54: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 54: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-05 14:51:39] ✅ Report 55: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 56: Irregular hours for 'זיוה אזולאי': 130.46 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 56: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (32.3% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 57: Irregular hours for 'ענת חזן': 149 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 57: 'ענת חזן' → 'ענת חזן' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 58: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 58: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-05 14:51:39] ✅ Report 59: 'יונתן מיימון' → 'יונתן מיימון' (match: 100.00%, status: OK)
+[2025-11-05 14:51:39] ⚠️ Report 60: Duplicate found for 'דוראל בן חמו' - merging data
+[2025-11-05 14:51:39] ⚠️ Report 61: Irregular hours for 'דניאלה ליבמן': 147.36 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 61: 'דניאלה ליבמן' → 'דניאלה ליבמן' (match: 100.00%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 62: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-05 14:51:39] ⚠️ Report 63: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 63: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 64: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 64: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-05 14:51:39] ⚠️ Report 65: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-05 14:51:39] ✅ Report 65: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 14:51:39] 
+============================================================
+[2025-11-05 14:51:39] Validation Summary:
+[2025-11-05 14:51:39]   - Total reports: 65
+[2025-11-05 14:51:39]   - Matched employees: 45
+[2025-11-05 14:51:39]   - Unmatched employees: 10
+[2025-11-05 14:51:39]   - Irregular hours: 31
+[2025-11-05 14:51:39] ============================================================
+
+[2025-11-05 14:51:39] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx
+[2025-11-05 14:58:28] ✅ Loaded 77 employees from master file.
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 10.80 hours, remaining vacation days: 0.74
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 32.30 hours, remaining vacation days: 27.24
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'לילך מקייטן' — added 7.39 hours, remaining vacation days: 20.14
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'לילך מקייטן' — added 7.39 hours, remaining vacation days: 4.14
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'מיכל פרץ' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 64.50 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'אוריאל אבני' — added 77.40 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'חן שחר כהן' — added 32.80 hours, remaining vacation days: 477.19
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'יונתן מיימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-05 14:58:28] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-05 14:58:28] 
+============================================================
+[2025-11-05 14:58:28] Starting data validation for 65 reports
+[2025-11-05 14:58:28] ============================================================
+
+[2025-11-05 14:58:28] ⚠️ Report 1: Irregular hours for 'מור גורן מישרין': 83.96 vs 191.8 standard
+[2025-11-05 14:58:28] ✅ Report 1: 'מור גורן מישרין' → 'מור גורן מישרין' (match: 100.00%, status: ⚠️ Irregular Hours (56.2% deviation))
+[2025-11-05 14:58:28] Report 2: No employee name found
+[2025-11-05 14:58:28] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 4: Unmatched employee 'חוטיב רכז' (best match ratio: 50.00%)
+[2025-11-05 14:58:28] ⚠️ Report 5: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-05 14:58:28] ✅ Report 5: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 6: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-05 14:58:28] ⚠️ Report 7: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-05 14:58:28] ⚠️ Report 8: Irregular hours for 'שרי אבני': 160.25 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 8: 'שרי אבני' → 'שרי אבני' (match: 100.00%, status: ⚠️ Irregular Hours (16.9% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 9: Duplicate found for 'מור גורן מישרין' - merging data
+[2025-11-05 14:58:28] ✅ Report 10: 'וסילי בוגייבסקי' → 'וסילי בוגייבסקי' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ✅ Report 11: 'דוראל בן חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 12: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-05 14:58:28] ✅ Report 12: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-05 14:58:28] ✅ Report 13: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-05 14:58:28] ⚠️ Report 14: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 14: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-05 14:58:28] ✅ Report 15: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 16: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 16: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 17: Irregular hours for 'שרית חודטוב': 138.41 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 17: 'שרית חודאטוב' → 'שרית חודטוב' (match: 95.65%, status: ⚠️ Irregular Hours (28.2% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 18: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 18: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 19: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-05 14:58:28] ✅ Report 19: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 20: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-05 14:58:28] ⚠️ Report 21: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 21: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-05 14:58:28] Report 22: No employee name found
+[2025-11-05 14:58:28] ⚠️ Report 23: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 23: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 24: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 24: 'אנטון אבולניקוב' → 'אנטון אבולניקוב' (match: 100.00%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 25: Irregular hours for 'שרון סדרייב': 155.5 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 25: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: ⚠️ Irregular Hours (19.3% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 26: Duplicate found for 'וסילי בוגייבסקי' - merging data
+[2025-11-05 14:58:28] ⚠️ Report 27: Irregular hours for 'ישראל פרידמן': 161.41 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 27: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.3% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 28: Unmatched employee 'לאירא רומיט' (best match ratio: 57.14%)
+[2025-11-05 14:58:28] ⚠️ Report 29: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-05 14:58:28] ⚠️ Report 30: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 30: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 31: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-05 14:58:28] ✅ Report 32: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 33: Irregular hours for 'מיכאל סטולברג': 117.51 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 33: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (39.1% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 34: Irregular hours for 'אברהם כהנא': 122.5 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 34: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: ⚠️ Irregular Hours (36.5% deviation))
+[2025-11-05 14:58:28] ✅ Report 35: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 36: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-05 14:58:28] ✅ Report 37: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 38: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-05 14:58:28] ⚠️ Report 39: Duplicate found for 'לילך מקייטן' - merging data
+[2025-11-05 14:58:28] ✅ Report 40: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 41: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 41: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-05 14:58:28] ✅ Report 42: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 43: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-05 14:58:28] ⚠️ Report 44: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 44: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 45: Irregular hours for 'מאיה פוזנרסון': 98.96 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 45: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (48.7% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 46: Irregular hours for 'אור כהן': 94.48 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 46: 'אור כהן' → 'אור כהן' (match: 100.00%, status: ⚠️ Irregular Hours (51.0% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 47: Irregular hours for 'אלכסנדר גופמן': 145.5 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 47: 'אלכסנדר גופמן' → 'אלכסנדר גופמן' (match: 100.00%, status: ⚠️ Irregular Hours (24.5% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 48: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 48: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-05 14:58:28] ✅ Report 49: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 50: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-05 14:58:28] Report 51: No employee name found
+[2025-11-05 14:58:28] ⚠️ Report 52: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 52: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-05 14:58:28] ⚠️ Report 54: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 54: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-05 14:58:28] ✅ Report 55: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 56: Irregular hours for 'זיוה אזולאי': 130.46 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 56: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (32.3% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 57: Irregular hours for 'ענת חזן': 149 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 57: 'ענת חזן' → 'ענת חזן' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 58: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 58: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-05 14:58:28] ✅ Report 59: 'יונתן מיימון' → 'יונתן מיימון' (match: 100.00%, status: OK)
+[2025-11-05 14:58:28] ⚠️ Report 60: Duplicate found for 'דוראל בן חמו' - merging data
+[2025-11-05 14:58:28] ⚠️ Report 61: Irregular hours for 'דניאלה ליבמן': 147.36 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 61: 'דניאלה ליבמן' → 'דניאלה ליבמן' (match: 100.00%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 62: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-05 14:58:28] ⚠️ Report 63: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 63: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 64: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 64: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-05 14:58:28] ⚠️ Report 65: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-05 14:58:28] ✅ Report 65: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 14:58:28] 
+============================================================
+[2025-11-05 14:58:28] Validation Summary:
+[2025-11-05 14:58:28]   - Total reports: 65
+[2025-11-05 14:58:28]   - Matched employees: 45
+[2025-11-05 14:58:28]   - Unmatched employees: 10
+[2025-11-05 14:58:28]   - Irregular hours: 32
+[2025-11-05 14:58:28] ============================================================
+
+[2025-11-05 14:58:28] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx
+[2025-11-05 15:07:24] ✅ Loaded 77 employees from master file.
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'שרי אבני' — added 32.55 hours, remaining vacation days: 15.22
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 10.80 hours, remaining vacation days: 0.74
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 32.30 hours, remaining vacation days: 27.24
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'לילך מקייטן' — added 7.39 hours, remaining vacation days: 4.14
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'מיכל פרץ' — added 37.30 hours, remaining vacation days: 4.41
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 64.50 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'אוריאל אבני' — added 77.40 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'חן שחר כהן' — added 32.80 hours, remaining vacation days: 477.19
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'יונתן מיימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-05 15:07:24] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-05 15:07:24] 
+============================================================
+[2025-11-05 15:07:24] Starting data validation for 65 reports
+[2025-11-05 15:07:24] ============================================================
+
+[2025-11-05 15:07:24] ⚠️ Report 1: Irregular hours for 'מור גורן מישרין': 83.96 vs 191.8 standard
+[2025-11-05 15:07:24] ✅ Report 1: 'מור גורן מישרין' → 'מור גורן מישרין' (match: 100.00%, status: ⚠️ Irregular Hours (56.2% deviation))
+[2025-11-05 15:07:24] Report 2: No employee name found
+[2025-11-05 15:07:24] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] Report 4: No employee name found
+[2025-11-05 15:07:24] ⚠️ Report 5: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-05 15:07:24] ✅ Report 5: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 6: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-05 15:07:24] ⚠️ Report 7: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-05 15:07:24] ✅ Report 8: 'שרי אבני' → 'שרי אבני' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 9: Duplicate found for 'מור גורן מישרין' - merging data
+[2025-11-05 15:07:24] ✅ Report 10: 'וסילי בוגייבסקי' → 'וסילי בוגייבסקי' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ✅ Report 11: 'דוראל בן חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 12: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-05 15:07:24] ✅ Report 12: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-05 15:07:24] ✅ Report 13: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-05 15:07:24] ⚠️ Report 14: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 14: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-05 15:07:24] ✅ Report 15: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 16: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 16: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 17: Irregular hours for 'שרית חודטוב': 138.41 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 17: 'שרית חודאטוב' → 'שרית חודטוב' (match: 95.65%, status: ⚠️ Irregular Hours (28.2% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 18: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 18: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 19: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-05 15:07:24] ✅ Report 19: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 20: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-05 15:07:24] ⚠️ Report 21: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 21: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-05 15:07:24] Report 22: No employee name found
+[2025-11-05 15:07:24] ⚠️ Report 23: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 23: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 24: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 24: 'אנטון אבולניקוב' → 'אנטון אבולניקוב' (match: 100.00%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 25: Irregular hours for 'שרון סדרייב': 155.5 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 25: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: ⚠️ Irregular Hours (19.3% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 26: Duplicate found for 'וסילי בוגייבסקי' - merging data
+[2025-11-05 15:07:24] ⚠️ Report 27: Irregular hours for 'ישראל פרידמן': 161.41 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 27: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.3% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 28: Unmatched employee 'לאירא רומיט' (best match ratio: 57.14%)
+[2025-11-05 15:07:24] ⚠️ Report 29: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-05 15:07:24] ⚠️ Report 30: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 30: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 31: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-05 15:07:24] ✅ Report 32: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 33: Irregular hours for 'מיכאל סטולברג': 117.51 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 33: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (39.1% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 34: Irregular hours for 'אברהם כהנא': 150.5 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 34: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: ⚠️ Irregular Hours (21.9% deviation))
+[2025-11-05 15:07:24] ✅ Report 35: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 36: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-05 15:07:24] ✅ Report 37: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 38: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-05 15:07:24] ⚠️ Report 39: Duplicate found for 'לילך מקייטן' - merging data
+[2025-11-05 15:07:24] ✅ Report 40: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 41: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 41: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-05 15:07:24] ✅ Report 42: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 43: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-05 15:07:24] ⚠️ Report 44: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 44: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 45: Irregular hours for 'מאיה פוזנרסון': 98.96 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 45: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (48.7% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 46: Irregular hours for 'אור כהן': 94.48 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 46: 'אור כהן' → 'אור כהן' (match: 100.00%, status: ⚠️ Irregular Hours (51.0% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 47: Irregular hours for 'אלכסנדר גופמן': 145.5 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 47: 'אלכסנדר גופמן' → 'אלכסנדר גופמן' (match: 100.00%, status: ⚠️ Irregular Hours (24.5% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 48: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 48: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-05 15:07:24] ✅ Report 49: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 50: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-05 15:07:24] Report 51: No employee name found
+[2025-11-05 15:07:24] ⚠️ Report 52: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 52: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-05 15:07:24] ⚠️ Report 54: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 54: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-05 15:07:24] ✅ Report 55: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 56: Irregular hours for 'זיוה אזולאי': 130.46 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 56: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (32.3% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 57: Irregular hours for 'ענת חזן': 149 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 57: 'ענת חזן' → 'ענת חזן' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 58: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 58: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-05 15:07:24] ✅ Report 59: 'יונתן מיימון' → 'יונתן מיימון' (match: 100.00%, status: OK)
+[2025-11-05 15:07:24] ⚠️ Report 60: Duplicate found for 'דוראל בן חמו' - merging data
+[2025-11-05 15:07:24] ⚠️ Report 61: Irregular hours for 'דניאלה ליבמן': 147.36 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 61: 'דניאלה ליבמן' → 'דניאלה ליבמן' (match: 100.00%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 62: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-05 15:07:24] ⚠️ Report 63: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 63: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 64: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 64: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-05 15:07:24] ⚠️ Report 65: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-05 15:07:24] ✅ Report 65: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 15:07:24] 
+============================================================
+[2025-11-05 15:07:24] Validation Summary:
+[2025-11-05 15:07:24]   - Total reports: 65
+[2025-11-05 15:07:24]   - Matched employees: 45
+[2025-11-05 15:07:24]   - Unmatched employees: 9
+[2025-11-05 15:07:24]   - Irregular hours: 31
+[2025-11-05 15:07:24] ============================================================
+
+[2025-11-05 15:07:24] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx
+[2025-11-05 15:21:07] ✅ Loaded 77 employees from master file.
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'אורי רדו' — added 40.80 hours, remaining vacation days: 14.26
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'שרי אבני' — added 32.55 hours, remaining vacation days: 15.22
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 10.80 hours, remaining vacation days: 0.74
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'זויה ציבולסקיה' — added 58.78 hours, remaining vacation days: 474.17
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'קרן ויגלמן' — added 25.80 hours, remaining vacation days: 0.00
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'שרון סדרייב' — added 53.74 hours, remaining vacation days: 1.75
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'וסילי בוגייבסקי' — added 32.30 hours, remaining vacation days: 27.24
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'עומר כהן' — added 51.60 hours, remaining vacation days: 0.00
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'אברהם כהנא' — added 43.00 hours, remaining vacation days: 0.00
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'בני בלאושטיין' — added 12.02 hours, remaining vacation days: 2.60
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'לילך מקייטן' — added 7.39 hours, remaining vacation days: 4.14
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'מיכל פרץ' — added 92.80 hours, remaining vacation days: 470.21
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'בוריס מוראדוב' — added 17.20 hours, remaining vacation days: 0.00
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'אלכסנדר גופמן' — added 64.50 hours, remaining vacation days: 0.00
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'ריקי קורלנסקי' — added 60.20 hours, remaining vacation days: 0.00
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'חן שחר כהן' — added 187.80 hours, remaining vacation days: 10889.16
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'יונתן מיימון' — added 77.30 hours, remaining vacation days: 11.01
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'דוראל בן חמו' — added 56.66 hours, remaining vacation days: 4100.41
+[2025-11-05 15:21:07] 🔄 Vacation completion applied for 'חן שחר כהן' — added 54.80 hours, remaining vacation days: 474.63
+[2025-11-05 15:21:07] 
+============================================================
+[2025-11-05 15:21:07] Starting data validation for 65 reports
+[2025-11-05 15:21:07] ============================================================
+
+[2025-11-05 15:21:07] ⚠️ Report 1: Irregular hours for 'מור גורן מישרין': 83.96 vs 191.8 standard
+[2025-11-05 15:21:07] ✅ Report 1: 'מור גורן מישרין' → 'מור גורן מישרין' (match: 100.00%, status: ⚠️ Irregular Hours (56.2% deviation))
+[2025-11-05 15:21:07] Report 2: No employee name found
+[2025-11-05 15:21:07] ✅ Report 3: 'אורי רדו' → 'אורי רדו' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 4: Unmatched employee 'חוטיב רכז' (best match ratio: 50.00%)
+[2025-11-05 15:21:07] ⚠️ Report 5: Irregular hours for 'יניב עמרמי': 157.33 vs 84 standard
+[2025-11-05 15:21:07] ✅ Report 5: 'יניב עמרמי' → 'יניב עמרמי' (match: 100.00%, status: ⚠️ Irregular Hours (87.3% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 6: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 53.33%)
+[2025-11-05 15:21:07] ⚠️ Report 7: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 50.00%)
+[2025-11-05 15:21:07] ✅ Report 8: 'שרי אבני' → 'שרי אבני' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ✅ Report 9: 'אלכסנדר גלרוד' → 'אלכסנדר בורדו' (match: 76.92%, status: No validation)
+[2025-11-05 15:21:07] ✅ Report 10: 'וסילי בוגייבסקי' → 'וסילי בוגייבסקי' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ✅ Report 11: 'דוראל בן חמו' → 'דוראל בן חמו' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 12: Irregular hours for 'אברהם שורין': 117 vs 42 standard
+[2025-11-05 15:21:07] ✅ Report 12: 'אברהם שורין' → 'אברהם שורין' (match: 100.00%, status: ⚠️ Irregular Hours (178.6% deviation))
+[2025-11-05 15:21:07] ✅ Report 13: 'חיים תירוש' → 'חיים תירוש' (match: 100.00%, status: No validation)
+[2025-11-05 15:21:07] ⚠️ Report 14: Irregular hours for 'אלה קוגן': 135.95 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 14: 'אלה קוגן' → 'אלה קוגן' (match: 100.00%, status: ⚠️ Irregular Hours (29.5% deviation))
+[2025-11-05 15:21:07] ✅ Report 15: 'זויה ציבולסקיה' → 'זויה ציבולסקיה' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 16: Irregular hours for 'אלון גרוס': 159 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 16: 'אלון גרוס' → 'אלון גרוס' (match: 100.00%, status: ⚠️ Irregular Hours (17.5% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 17: Unmatched employee 'שרית' (best match ratio: 57.14%)
+[2025-11-05 15:21:07] ⚠️ Report 18: Irregular hours for 'אפרת כהן': 126.55 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 18: 'אפרת כהן' → 'אפרת כהן' (match: 100.00%, status: ⚠️ Irregular Hours (34.4% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 19: Irregular hours for 'גלעד ספטי': 144 vs 84 standard
+[2025-11-05 15:21:07] ✅ Report 19: 'גלעד ספטי' → 'גלעד ספטי' (match: 100.00%, status: ⚠️ Irregular Hours (71.4% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 20: Unmatched employee 'אמיר זחאלקה' (best match ratio: 50.00%)
+[2025-11-05 15:21:07] ⚠️ Report 21: Irregular hours for 'שמואל קריסי': 105.53 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 21: 'שמואל קריסי' → 'שמואל קריסי' (match: 100.00%, status: ⚠️ Irregular Hours (45.3% deviation))
+[2025-11-05 15:21:07] Report 22: No employee name found
+[2025-11-05 15:21:07] ⚠️ Report 23: Irregular hours for 'קרן וויגלמן': 147.3 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 23: 'קרן ויגלמן' → 'קרן וויגלמן' (match: 95.24%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 24: Irregular hours for 'אנטון אבולניקוב': 163.1 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 24: 'אנטון אבולניקוב' → 'אנטון אבולניקוב' (match: 100.00%, status: ⚠️ Irregular Hours (15.4% deviation))
+[2025-11-05 15:21:07] ✅ Report 25: 'שרון סדרייב' → 'שרון סדרייב' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 26: Duplicate found for 'וסילי בוגייבסקי' - merging data
+[2025-11-05 15:21:07] ⚠️ Report 27: Irregular hours for 'ישראל פרידמן': 161.68 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 27: 'ישראל פרידמן' → 'ישראל פרידמן' (match: 100.00%, status: ⚠️ Irregular Hours (16.1% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 28: Unmatched employee 'לאירא רומיט' (best match ratio: 57.14%)
+[2025-11-05 15:21:07] ⚠️ Report 29: Unmatched employee 'זאב סוסקין' (best match ratio: 58.33%)
+[2025-11-05 15:21:07] ⚠️ Report 30: Irregular hours for 'עומר כהן': 146.6 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 30: 'עומר כהן' → 'עומר כהן' (match: 100.00%, status: ⚠️ Irregular Hours (24.0% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 31: Unmatched employee 'ליאור הס' (best match ratio: 66.67%)
+[2025-11-05 15:21:07] ✅ Report 32: 'מוריה פיטוסי' → 'מוריה פיטוסי' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 33: Irregular hours for 'מיכאל סטולברג': 117.85 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 33: 'מיכאל סטולברג' → 'מיכאל סטולברג' (match: 100.00%, status: ⚠️ Irregular Hours (38.9% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 34: Irregular hours for 'אברהם כהנא': 122.5 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 34: 'אברהם כהנא' → 'אברהם כהנא' (match: 100.00%, status: ⚠️ Irregular Hours (36.5% deviation))
+[2025-11-05 15:21:07] ✅ Report 35: 'לילך מקייטן' → 'לילך מקייטן' (match: 100.00%, status: No validation)
+[2025-11-05 15:21:07] ⚠️ Report 36: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 50.00%)
+[2025-11-05 15:21:07] ✅ Report 37: 'בני בלאושטיין' → 'בני בלאושטיין' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 38: Unmatched employee 'סמואל איסנין' (best match ratio: 69.57%)
+[2025-11-05 15:21:07] ⚠️ Report 39: Duplicate found for 'לילך מקייטן' - merging data
+[2025-11-05 15:21:07] ✅ Report 40: 'מיכל פרץ' → 'מיכל פרץ' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 41: Irregular hours for 'בוריס מוראדוב': 170.2 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 41: 'בוריס מוראדוב' → 'בוריס מוראדוב' (match: 100.00%, status: ⚠️ Irregular Hours (11.7% deviation))
+[2025-11-05 15:21:07] ✅ Report 42: 'מאיר שמייב' → 'מאיר שמייב' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 43: Duplicate found for 'גלעד ספטי' - merging data
+[2025-11-05 15:21:07] ⚠️ Report 44: Irregular hours for 'איליה פינקלשטיין': 156 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 44: 'איליה פינקלשטיין' → 'איליה פינקלשטיין' (match: 100.00%, status: ⚠️ Irregular Hours (19.1% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 45: Irregular hours for 'מאיה פוזנרסון': 92.48 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 45: 'מאיה פוזנרסון' → 'מאיה פוזנרסון' (match: 100.00%, status: ⚠️ Irregular Hours (52.0% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 46: Irregular hours for 'אור כהן': 94.48 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 46: 'אור כהן' → 'אור כהן' (match: 100.00%, status: ⚠️ Irregular Hours (51.0% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 47: Irregular hours for 'אלכסנדר גופמן': 145.5 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 47: 'אלכסנדר גופמן' → 'אלכסנדר גופמן' (match: 100.00%, status: ⚠️ Irregular Hours (24.5% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 48: Irregular hours for 'דויד קליין': 150.78 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 48: 'דויד קליין' → 'דויד קליין' (match: 100.00%, status: ⚠️ Irregular Hours (21.8% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 49: Irregular hours for 'אוריאל אבני': 109.42 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 49: 'אוריאל אבני' → 'אוריאל אבני' (match: 100.00%, status: ⚠️ Irregular Hours (43.2% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 50: Duplicate found for 'מאיר שמייב' - merging data
+[2025-11-05 15:21:07] Report 51: No employee name found
+[2025-11-05 15:21:07] ⚠️ Report 52: Irregular hours for 'פול מלטסב': 149.83 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 52: 'פול מלטסב' → 'פול מלטסב' (match: 100.00%, status: ⚠️ Irregular Hours (22.3% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 50.00%)
+[2025-11-05 15:21:07] ⚠️ Report 54: Irregular hours for 'ריקי קורלנסקי': 160.7 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 54: 'ריקי קורלנסקי' → 'ריקי קורלנסקי' (match: 100.00%, status: ⚠️ Irregular Hours (16.6% deviation))
+[2025-11-05 15:21:07] ✅ Report 55: 'חן שחר כהן' → 'חן שחר כהן' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 56: Irregular hours for 'זיוה אזולאי': 155.5 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 56: 'זיוה אזולאי' → 'זיוה אזולאי' (match: 100.00%, status: ⚠️ Irregular Hours (19.3% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 57: Irregular hours for 'ענת חזן': 149 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 57: 'ענת חזן' → 'ענת חזן' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 58: Irregular hours for 'מינה גרינבלט': 111.27 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 58: 'מיני גרינבלט' → 'מינה גרינבלט' (match: 91.67%, status: ⚠️ Irregular Hours (42.3% deviation))
+[2025-11-05 15:21:07] ✅ Report 59: 'יונתן מיימון' → 'יונתן מיימון' (match: 100.00%, status: OK)
+[2025-11-05 15:21:07] ⚠️ Report 60: Duplicate found for 'דוראל בן חמו' - merging data
+[2025-11-05 15:21:07] ⚠️ Report 61: Irregular hours for 'דניאלה ליבמן': 147.36 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 61: 'דניאלה ליבמן' → 'דניאלה ליבמן' (match: 100.00%, status: ⚠️ Irregular Hours (23.6% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 62: Duplicate found for 'חן שחר כהן' - merging data
+[2025-11-05 15:21:07] ⚠️ Report 63: Irregular hours for 'תומר ריידר': 147.75 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 63: 'תומר ריידר' → 'תומר ריידר' (match: 100.00%, status: ⚠️ Irregular Hours (23.4% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 64: Irregular hours for 'נורית מור': 141.05 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 64: 'נורית מור' → 'נורית מור' (match: 100.00%, status: ⚠️ Irregular Hours (26.8% deviation))
+[2025-11-05 15:21:07] ⚠️ Report 65: Irregular hours for 'מריוס קולנברג': 149 vs 192.8 standard
+[2025-11-05 15:21:07] ✅ Report 65: 'מריוס קולנברג' → 'מריוס קולנברג' (match: 100.00%, status: ⚠️ Irregular Hours (22.7% deviation))
+[2025-11-05 15:21:07] 
+============================================================
+[2025-11-05 15:21:07] Validation Summary:
+[2025-11-05 15:21:07]   - Total reports: 65
+[2025-11-05 15:21:07]   - Matched employees: 45
+[2025-11-05 15:21:07]   - Unmatched employees: 11
+[2025-11-05 15:21:07]   - Irregular hours: 30
+[2025-11-05 15:21:07] ============================================================
+
+[2025-11-05 15:21:07] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx
+[2025-11-05 15:50:03] ✅ Loaded 0 employees from master list/file.
+[2025-11-05 15:50:03] 
+============================================================
+[2025-11-05 15:50:03] Starting data validation for 136 reports
+[2025-11-05 15:50:03] ============================================================
+
+[2025-11-05 15:50:03] Report 1: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 2: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 3: Unmatched employee 'אלון גרוס' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 4: Unmatched employee 'יניב עמרמי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] Report 5: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 6: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 7: Unmatched employee 'איליה פינקלשטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 8: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 9: Unmatched employee 'אלכסנדר גופמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 10: Unmatched employee 'אורי רדו' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 11: Unmatched employee 'אברהם שורין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 12: Unmatched employee 'ליאור הס' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] Report 13: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 14: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 15: Unmatched employee 'יניב עמרמי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 16: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 17: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 18: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 19: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 20: Unmatched employee 'וסילי בוגייבסקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 21: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] Report 22: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 23: Unmatched employee 'אלכסנדר גלרוד' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 24: Unmatched employee 'אברהם שורין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 25: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 26: Unmatched employee 'ריקי קורלנסקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 27: Unmatched employee 'אירה רומיט' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 28: Unmatched employee 'איליה פינקלשטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 29: Unmatched employee 'אברהם שורין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 30: Unmatched employee 'אלון גרוס' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 31: Unmatched employee 'אברהם שורין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 32: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 33: Unmatched employee 'חיים תירוש' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 34: Unmatched employee 'זאב סוסקין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 35: Unmatched employee 'זויה ציבולסקיה' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 36: Unmatched employee 'בני בלאושטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 37: Unmatched employee 'אלון גרוס' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 38: Unmatched employee 'שרית חודטוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 39: Unmatched employee 'בוריס מוראדוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 40: Unmatched employee 'מריוס קולנברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 41: Unmatched employee 'נורית מור' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 42: Unmatched employee 'אנטון אבוליקוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 43: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 44: Unmatched employee 'אמיר זחאלקה' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 45: Unmatched employee 'נורית מור' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] Report 46: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 47: Unmatched employee 'קרן וויגלמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 48: Unmatched employee 'אנטון אבוליקוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 49: Unmatched employee 'דויד קליין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 50: Unmatched employee 'שרון סדרייב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 51: Unmatched employee 'וסילי בוגייבסקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 52: Unmatched employee 'מיכאל סטולברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 53: Unmatched employee 'לאירא רומיט' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 54: Unmatched employee 'נורית מור' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 55: Unmatched employee 'אלכסנדר גלרוד' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 56: Unmatched employee 'עומר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 57: Unmatched employee 'אורי רדו' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 58: Unmatched employee 'ליאור הס' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 59: Unmatched employee 'מיכאל סטולברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 60: Unmatched employee 'עומר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 61: Unmatched employee 'אנטון אבוליקוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 62: Unmatched employee 'יונתן מימון' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 63: Unmatched employee 'מיכאל סטולברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 64: Unmatched employee 'אברהם קהנה' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 65: Unmatched employee 'אורי רדו' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 66: Unmatched employee 'מריוס קולנברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 67: Unmatched employee 'אורי רדו' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 68: Unmatched employee 'אוריאל אבני' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 69: Unmatched employee 'שרית חודאטוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 70: Unmatched employee 'לילך מקייטן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 71: Unmatched employee 'עומר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 72: Unmatched employee 'אנטון אבוליקוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 73: Unmatched employee 'יונתן מימון' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 74: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 75: Unmatched employee 'אפרת כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 76: Unmatched employee 'זיוה אזולאי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 77: Unmatched employee 'בני בלאושטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 78: Unmatched employee 'בוריס מוראדוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 79: Unmatched employee 'שמואל איסנין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 80: Unmatched employee 'לילך מקייטן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 81: Unmatched employee 'זויה ציבולסקיה' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 82: Unmatched employee 'בני בלאושטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 83: Unmatched employee 'ישראל פרידמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 84: Unmatched employee 'מיכל פרץ' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 85: Unmatched employee 'בוריס מוראדוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 86: Unmatched employee 'מאיר שמייב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 87: Unmatched employee 'שרית חודטוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 88: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 89: Unmatched employee 'אלה קוגן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 90: Unmatched employee 'זויה ציבולסקיה' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 91: Unmatched employee 'איליה פינקלשטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 92: Unmatched employee 'תומר ריידר' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 93: Unmatched employee 'מאיה פוזנרסון' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 94: Unmatched employee 'זיוה אזולאי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 95: Unmatched employee 'מוריה פיטוסי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 96: Unmatched employee 'שרית חודטוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 97: Unmatched employee 'זיוה אזולאי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 98: Unmatched employee 'אלכסנדר גופמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 99: Unmatched employee 'שמואל קריסי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 100: Unmatched employee 'דויד קליין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] Report 101: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 102: Unmatched employee 'פול מלטסב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 103: Unmatched employee 'זויה ציבולסקיה' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 104: Unmatched employee 'מאיר שמייב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] Report 105: No employee name found
+[2025-11-05 15:50:03] ⚠️ Report 106: Unmatched employee 'מיכאל סטולברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 107: Unmatched employee 'בני בלאושטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 108: Unmatched employee 'אור כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 109: Unmatched employee 'ניר דיאמנט' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 110: Unmatched employee 'ריקי קורלנסקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 111: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 112: Unmatched employee 'מריוס קולנברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 113: Unmatched employee 'בוריס מוראדוב' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 114: Unmatched employee 'מינה גרינבלט' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 115: Unmatched employee 'זיוה אזולאי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 116: Unmatched employee 'חוד סיטרכ דבוע' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 117: Unmatched employee 'זאב סוסקין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 118: Unmatched employee 'עומר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 119: Unmatched employee 'יונתן מימון' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 120: Unmatched employee 'אלכסנדר גופמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 121: Unmatched employee 'איליה פינקלשטיין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 122: Unmatched employee 'יונתן מימון' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 123: Unmatched employee 'אלון גרוס' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 124: Unmatched employee 'בן-חמו' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 125: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 126: Unmatched employee 'מיכל פרץ' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 127: Unmatched employee 'דניאלה ליבמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 128: Unmatched employee 'וסילי בוגייבסקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 129: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 130: Unmatched employee 'אברהם שורין' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 131: Unmatched employee 'תומר ריידר' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 132: Unmatched employee 'וסילי בוגייבסקי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 133: Unmatched employee 'נורית מור' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 134: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 135: Unmatched employee 'מריוס קולנברג' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] ⚠️ Report 136: Unmatched employee 'אלכסנדר גופמן' (best match ratio: 0.00%)
+[2025-11-05 15:50:03] 
+============================================================
+[2025-11-05 15:50:03] Validation Summary:
+[2025-11-05 15:50:03]   - Total reports: 136
+[2025-11-05 15:50:03]   - Matched employees: 0
+[2025-11-05 15:50:03]   - Unmatched employees: 129
+[2025-11-05 15:50:03]   - Irregular hours: 0
+[2025-11-05 15:50:03] ============================================================
+
+[2025-11-05 15:50:03] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx

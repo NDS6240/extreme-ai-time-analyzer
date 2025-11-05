@@ -6,6 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import re  # *** התיקון כאן - הוספת הייבוא החסר ***
 from datetime import datetime, timedelta
+import json # <--- חדש: נוסף ייבוא
 
 # Load environment variables from .env file
 load_dotenv()
@@ -68,11 +69,26 @@ def fetch_reports_from_gmail():
 
                 msg = email.message_from_bytes(raw_email)
 
+                # --- חדש: חילוץ נושא, שולח, וגוף המייל ---
                 subject = "No Subject"
                 if msg["Subject"]:
-                    subject, encoding = decode_header(msg["Subject"])[0]
-                    if isinstance(subject, bytes):
-                        subject = subject.decode(encoding or "utf-8", errors="ignore")
+                    subject_header = decode_header(msg["Subject"])[0]
+                    if isinstance(subject_header[0], bytes):
+                        subject = subject_header[0].decode(subject_header[1] or "utf-8", errors="ignore")
+                    else:
+                        subject = str(subject_header[0])
+                
+                from_ = "No Sender"
+                if msg["From"]:
+                    from_header = decode_header(msg["From"])[0]
+                    if isinstance(from_header[0], bytes):
+                        from_ = from_header[0].decode(from_header[1] or "utf-8", errors="ignore")
+                    else:
+                        from_ = str(from_header[0])
+
+                email_body_text = ""
+                # --- סוף קטע חדש ---
+
 
                 # המרת ID ל-string לצורך הדפסה בטוחה
                 msg_id_str = num.decode() if isinstance(num, bytes) else str(num)
@@ -86,6 +102,17 @@ def fetch_reports_from_gmail():
 
                     disposition = part.get('Content-Disposition', '') or ''
                     is_attachment = disposition.startswith(('attachment', 'inline'))
+                    
+                    # --- חדש: חילוץ גוף המייל (גם אם יש קובץ מצורף) ---
+                    if not is_attachment and part.get_content_type() == "text/plain":
+                        if not email_body_text: # חלץ רק את החלק הראשון (העיקרי)
+                            try:
+                                body_payload = part.get_payload(decode=True)
+                                if body_payload:
+                                    email_body_text = body_payload.decode(part.get_content_charset() or "utf-8", errors="ignore")
+                            except Exception:
+                                pass # התעלם משגיאות בחילוץ גוף המייל
+                    # --- סוף קטע חדש ---
 
                     if is_attachment:
                         filename = part.get_filename()
@@ -112,14 +139,38 @@ def fetch_reports_from_gmail():
                                 counter += 1
 
                             try:
+                                # שמירת הקובץ המצורף
                                 with open(filepath, "wb") as f:
                                     f.write(part.get_payload(decode=True))
                                 print(f"✅ Saved attachment: {filepath.name}")
+
+                                # --- חדש: שמירת קובץ מטא-דאטה נלווה ---
+                                meta_filepath = filepath.with_suffix(filepath.suffix + '.meta.json')
+                                meta_data = {
+                                    "subject": subject,
+                                    "from": from_,
+                                    "body_snippet": email_body_text[:2000] # שמירת 2000 התווים הראשונים של גוף המייל
+                                }
+                                try:
+                                    with open(meta_filepath, "w", encoding="utf-8") as meta_f:
+                                        json.dump(meta_data, meta_f, ensure_ascii=False, indent=4)
+                                    print(f"✅ Saved metadata: {meta_filepath.name}")
+                                except Exception as e_meta:
+                                    print(f"❌ Error writing metadata file {meta_filepath.name}: {e_meta}")
+                                # --- סוף קטע חדש ---
+
                             except IOError as e:
                                 print(f"❌ Error writing file {filepath.name}: {e}")
+                        
+                        # --- שונה: הלוגיקה של שמירת גוף המייל כ-TXT הועברה ---
+                        # (הלוגיקה הישנה ששמרה גוף מייל כ-TXT נמחקה מכאן
+                        # מכיוון שאנו תמיד מחפשים קבצים מצורפים,
+                        # וגוף המייל נשמר עכשיו בקובץ ה-JSON)
+                        # ...
 
-                    elif part.get_content_type() == "text/plain":
-                        if body_text_part:
+                    # --- חדש: שמירת גוף המייל כ-TXT רק אם *אין* קבצים מצורפים ---
+                    elif part.get_content_type() == "text/plain" and not any(p.get('Content-Disposition', '').startswith('attachment') for p in msg.walk()):
+                        if body_text_part: # אם כבר שמרנו גוף מייל
                             continue
 
                         body_payload = part.get_payload(decode=True)
@@ -146,10 +197,11 @@ def fetch_reports_from_gmail():
                             try:
                                 with open(filepath, "w", encoding="utf-8") as f:
                                     f.write(body_text)
-                                print(f"✅ Saved email body: {filepath.name}")
-                                body_text_part = body_text
+                                print(f"✅ Saved email body (as .txt): {filepath.name}")
+                                body_text_part = body_text # סמן ששמרנו
                             except IOError as e:
                                 print(f"❌ Error writing email body file {filepath.name}: {e}")
+                    # --- סוף קטע חדש ---
 
             except Exception as e:
                 msg_id_str = num.decode() if isinstance(num, bytes) else str(num)
