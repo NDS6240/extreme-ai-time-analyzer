@@ -2244,3 +2244,84 @@
 [2025-11-05 15:50:03] ============================================================
 
 [2025-11-05 15:50:03] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-05.xlsx
+[2025-11-09 13:04:07] ✅ Loaded 0 employees from master list/file.
+[2025-11-09 13:04:07] 
+============================================================
+[2025-11-09 13:04:07] Starting data validation for 65 reports
+[2025-11-09 13:04:07] ============================================================
+
+[2025-11-09 13:04:07] Report 1: No employee name found
+[2025-11-09 13:04:07] Report 2: No employee name found
+[2025-11-09 13:04:07] ⚠️ Report 3: Unmatched employee 'אורי רדו' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] Report 4: No employee name found
+[2025-11-09 13:04:07] ⚠️ Report 5: Unmatched employee 'יניב עמרמי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 6: Unmatched employee 'קיריל מילטיצקי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 7: Unmatched employee 'ויקטוריה ארליכמן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] Report 8: No employee name found
+[2025-11-09 13:04:07] ⚠️ Report 9: Unmatched employee 'אלכסנדר גלרוד' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 10: Unmatched employee 'יליסו יקסבייגוב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 11: Unmatched employee 'אורד ומח' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 12: Unmatched employee 'אברהם שורין' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 13: Unmatched employee 'חיים תירוש' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 14: Unmatched employee 'אלה קוגן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 15: Unmatched employee 'זויה ציבולסקיה' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 16: Unmatched employee 'אלון גרוס' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 17: Unmatched employee 'שרית חודטוב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 18: Unmatched employee 'אפרת כהן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 19: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 20: Unmatched employee 'אמיר זחאלקה' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 21: Unmatched employee 'שמואל קריסי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] Report 22: No employee name found
+[2025-11-09 13:04:07] ⚠️ Report 23: Unmatched employee 'קרן וויגלמן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 24: Unmatched employee 'אנטון אבוליקוב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 25: Unmatched employee 'שרון סדרייב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 26: Unmatched employee 'וסילי בוגייבסקי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 27: Unmatched employee 'ישראל פרידמן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 28: Unmatched employee 'לאירא רומיט' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 29: Unmatched employee 'זאב סוסקין' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 30: Unmatched employee 'עומר כהן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 31: Unmatched employee 'ליאור הס' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 32: Unmatched employee 'מוריה פיטוסי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 33: Unmatched employee 'מיכאל סטולברג' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 34: Unmatched employee 'אברהם כהן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 35: Unmatched employee 'לילך מקייטן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 36: Unmatched employee 'מנחם מאור עבוש' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 37: Unmatched employee 'בני בלאושטיין' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 38: Unmatched employee 'שמואל איסנין' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 39: Unmatched employee 'לילך מקייטן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 40: Unmatched employee 'מיכל פרץ' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 41: Unmatched employee 'בוריס מוראדוב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 42: Unmatched employee 'מאיר שמייב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 43: Unmatched employee 'גלעד ספטי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 44: Unmatched employee 'איליה פינקלשטיין' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 45: Unmatched employee 'מאיה פוזנרסון' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 46: Unmatched employee 'אור כהן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 47: Unmatched employee 'אלכסנדר גופמן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 48: Unmatched employee 'דויד קליין' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 49: Unmatched employee 'אוריאל אבני' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 50: Unmatched employee 'מאיר שמייב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] Report 51: No employee name found
+[2025-11-09 13:04:07] ⚠️ Report 52: Unmatched employee 'פול מלטסב' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 53: Unmatched employee 'ניר דיאמנט' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 54: Unmatched employee 'ריקי קורלנסקי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 55: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 56: Unmatched employee 'זיוה אזולאי' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 57: Unmatched employee 'חוד סיטרכ דבוע' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 58: Unmatched employee 'מינה גרינבלט' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 59: Unmatched employee 'יונתן מימון' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 60: Unmatched employee 'בן-חמו' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 61: Unmatched employee 'דניאלה ליבמן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 62: Unmatched employee 'חן שחר כהן' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 63: Unmatched employee 'תומר ריידר' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 64: Unmatched employee 'נורית מור' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] ⚠️ Report 65: Unmatched employee 'מריוס קולנברג' (best match ratio: 0.00%)
+[2025-11-09 13:04:07] 
+============================================================
+[2025-11-09 13:04:07] Validation Summary:
+[2025-11-09 13:04:07]   - Total reports: 65
+[2025-11-09 13:04:07]   - Matched employees: 0
+[2025-11-09 13:04:07]   - Unmatched employees: 59
+[2025-11-09 13:04:07]   - Irregular hours: 0
+[2025-11-09 13:04:07] ============================================================
+
+[2025-11-09 13:04:07] ✅ Summary table exported: downloads/reports_summary/employee_hours_summary_2025-11-09.xlsx
